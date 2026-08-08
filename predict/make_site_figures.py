@@ -127,6 +127,11 @@ def fig_lambda():
                 label="batch sweep (Fig. 4C, digitized)")
     ax1.scatter([7.76], [7.5], s=70, facecolor="none", edgecolor=GOOD,
                 linewidth=2, zorder=5, label="flow cell, 7.5 kV/cm")
+    ax1.scatter([7.76], [60.0], s=80, color=WARM, marker="X", zorder=5,
+                label="batch reference (~60 min)")
+    ax1.fill_between([6.5, 9.3], 90, 125, color=WARM, alpha=0.18, lw=0)
+    ax1.text(7.8, 100, "predicted\n90-125", fontsize=7.5, color=WARM,
+             ha="center")
     ax1.axvspan(0.1, 0.2, color=MUTED, alpha=0.15, lw=0)
     ax1.text(0.14, 14, "no clearing\nobserved\n(below corona\nonset)",
              fontsize=8.5, color=MUTED, ha="center")
@@ -139,10 +144,11 @@ def fig_lambda():
     ax1.set_ylim(2, 300)
     ax1.set_xlabel("Λ, electrocoalescence number")
     ax1.set_ylabel("time to 95% transmittance (min)")
-    ax1.set_title("Every voltage point on one line", fontsize=12, pad=10)
+    ax1.set_title("The sweep collapses; extrapolation beyond it does not",
+                  fontsize=12, pad=10)
     ax1.legend(frameon=False, fontsize=9, loc="upper right")
 
-    ax2.axhspan(c_fit * 0.9, c_fit * 1.1, color=COOL, alpha=0.12, lw=0)
+    ax2.axhspan(c_fit * 0.948, c_fit * 1.052, color=COOL, alpha=0.15, lw=0)
     ax2.scatter(lam, times * lam, s=55, color=COOL, zorder=5)
     ax2.axhline(c_fit, color=INK, lw=1.2, ls="--")
     ax2.set_xscale("log")
@@ -150,7 +156,7 @@ def fig_lambda():
     ax2.set_ylim(0, c_fit * 1.6)
     ax2.set_xlabel("Λ")
     ax2.set_ylabel("t × Λ (min)")
-    ax2.set_title("The collapse: t·Λ constant to ±10%",
+    ax2.set_title("The collapse: t·Λ, 5% RMS scatter",
                   fontsize=12, pad=10)
     fig.tight_layout()
     fig.savefig(OUT + "fig_lambda.png", dpi=170)

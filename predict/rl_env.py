@@ -8,8 +8,8 @@ the population dynamics, event sampling, settling and optics are implemented
 independently of the PBE code (ADA optics, not the Mie series).
 
 The AGENT does not see the microstate. It observes (turbidity bin, mean-size
-bin), like an experimentalist watching the beaker, and picks a field level
-every 30 s. Levels above the paper's ~8 kV/cm safe limit risk an arc that
+bin, resolved-water-layer quartile), like an experimentalist watching the
+beaker, and picks a field level every 30 s. Levels above the paper's ~8 kV/cm safe limit risk an arc that
 trips the supply. Reward is minus elapsed minutes, so the optimal value
 function at the start state equals minus the expected demulsification time.
 """

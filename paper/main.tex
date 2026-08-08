@@ -1,0 +1,688 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=1.9cm,top=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\setlength{\parskip}{0pt}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing{\section}{0pt}{10pt}{5pt}
+\titlespacing{\subsection}{0pt}{8pt}{3pt}
+
+\title{\Large\bfseries From pairwise electrocoalescence to optical clearing:\\
+a predictive dimensionless framework for electrostatic\\ demulsification of nanoemulsions}
+\author{Sreedath Panat$^{1,\ast}$, Raj Dandekar$^{1}$, Rajat Dandekar$^{1}$\\[2pt]
+\small $^{1}$Vizuara AI Labs\\
+\small $^{\ast}$Corresponding author.}
+\date{}
+
+\begin{document}
+\twocolumn[
+\maketitle
+\begin{center}\begin{minipage}{0.94\textwidth}\small
+\noindent\textbf{Abstract.}
+The pair-scale physics of electrocoalescence is textbook material: water
+droplets in oil polarize, attract, chain, and merge. Yet the observable that
+decides whether an electrostatic demulsifier works, the time for the emulsion
+to \emph{optically clear}, cannot be obtained from any single-pair argument,
+and has so far been measured rather than predicted. Here we construct a
+predictive chain from pair electrostatics to the operational 95\%-transmittance
+endpoint for water-in-oil nanoemulsions, using only pre-experiment setup
+information: material properties, cell geometry, device characterization, the
+initial droplet-size distribution, and a bound on the surfactant film barrier
+extracted from the emulsion's zero-field shelf life. Three independent
+computational routes, a closed-form staged cascade, a polydisperse population
+balance with a Mie-scattering endpoint, and a stochastic super-droplet
+simulation steered by a reinforcement-learning agent, predict, without
+calibration to any kinetic measurement, clearing in 90--125 minutes for a
+175\,nm, 2\% emulsion at 7.5\,kV/cm; the measured value, not consulted
+during model construction, is $\sim$60 minutes. The
+framework identifies two well-separated clocks: bulk water separation
+(minutes) and optical clearing (hours), the latter controlled by a
+sub-100-nm fines tail. A single dimensionless group, the electrocoalescence
+number $\Lambda=\pi\varepsilon_0\varepsilon_{\mathrm{oil}}K^2E^2a^3/k_BT$,
+gates the entire cascade: published voltage-sweep data collapse onto
+$t\cdot\Lambda=23.5$\,min (5\% RMS scatter), with the go/no-go threshold
+$\Lambda^{*}\!\approx\!0.8$ predicted in advance. The framework further
+explains, without fitting, why saline droplets demulsify more slowly than
+fresh water. Code and data are openly available.
+\end{minipage}\end{center}
+\vspace{14pt}
+]
+
+\section{Introduction}
+
+Separating emulsified water from oil is a rate-limiting operation across crude
+desalting, produced-water treatment, and waste-oil recycling, and it becomes
+hardest exactly where it matters most: at nanoscale droplet sizes, where
+gravity is powerless and surfactant films render the dispersion metastable for
+months~\cite{eow2001,tadros2009}. Electrocoalescence, driving droplet merger
+with an electric field, is the classical remedy~\cite{atten1993,eow2001}, but
+conventional immersed-electrode devices are capped near 1\,kV/cm by
+shorting through droplet chains. A recently demonstrated non-Laplacian,
+air-gap corona architecture removes that cap and sustains fields up to
+$\sim$7.5\,kV/cm across the emulsion, demulsifying 150--800\,nm water-in-oil
+emulsions without chemical additives~\cite{panat2025}.
+
+The microphysics underlying such devices is well established. A conducting
+aqueous droplet in oil acquires an induced dipole; aligned dipoles attract,
+chain, and press out the intervening oil film; rupture and merger
+follow~\cite{atten1993,zhang1995,jones1995}. What is \emph{not} established is
+the bridge from this pair-scale picture to the quantity an operator actually
+observes: the time for a milky emulsion to become transparent. The two are
+separated by seven orders of magnitude in droplet count, by a coalescence
+cascade spanning three decades in radius, by gravity, and by the optics of
+light scattering. Population-balance models of electrocoalescers have made
+important progress on parts of this bridge, predicting droplet-size
+evolution and water-removal efficiency in microscale
+systems~\cite{sharma2023,anand2019,su2023,rahmani2023,khajeh2020}, but they
+are calibrated against measured kinetics, address micron-scale emulsions,
+and stop short of the observable an operator actually uses: the optical
+clearing of the sample. For the nanoemulsion regime, where Brownian motion,
+surfactant film barriers, and light scattering by sub-wavelength droplets
+dominate, the clearing time has remained an empirical quantity: measured
+and correlated with voltage, but not predicted from first principles.
+
+This paper constructs and tests that bridge. Our contributions are fourfold.
+First, a multiscale framework that converts setup information alone,
+material properties, geometry, device current--voltage characterization, the
+initial size distribution, and a film-barrier bound extracted from the
+emulsion's zero-field shelf life, into a prediction of the \emph{optical}
+clearing time with zero calibrated parameters; unlike prior
+population-balance treatments~\cite{sharma2023,anand2019,su2023}, nothing
+is fitted to kinetic data, the endpoint is evaluated through Mie optics
+exactly as measured, and the regime is the Brownian-dominated nanoemulsion
+limit. Second, a strict separation of two
+observables that are usually conflated: the \emph{mass clock} (bulk water
+resolved into a free layer, minutes at high field) and the \emph{optical
+clock} (95\% relative transmittance, slower by a factor 20--50), the latter
+controlled by a fines tail that no single-size argument can represent.
+Third, a dimensionless organizing group: the electrocoalescence number
+$\Lambda$, the induced-dipole pair energy at contact in units of $k_BT$.
+$\Lambda$ is the droplet analogue of the dipolar coupling constant of
+electrorheology~\cite{halsey1990}; we show that it gates feasibility with a
+threshold predictable from shelf life, and that the published voltage-sweep
+data of Ref.~\cite{panat2025} collapse onto $t\cdot\Lambda=\text{const}$ to
+within $\pm5\%$. Fourth, a validation protocol we believe is itself useful: the prediction
+was made without calibration to any kinetic measurement, by three
+population-integration machineries with disjoint numerical failure modes
+(analytic, population balance, and stochastic simulation driven by a
+reinforcement-learning agent), with the measured kinetics quarantined until
+all three numbers were frozen. We are explicit below about what this
+protocol does and does not establish.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig1_mechanism.png}
+\caption{\textbf{The multiscale chain from pair electrostatics to optical
+clearing.} At the pair scale (nm, ns) droplets polarize and chain along the
+field; merger requires squeezing the surfactant-stabilized oil film past a
+20--30\,$k_BT$ barrier. At the population scale (\textmu m, min) coalescence
+proceeds as a parallel cascade: $\sim$25 volume doublings connect 175\,nm to
+settling sizes, with Brownian capture dominating transport below a micron and
+gravitational sweep above it. At the cell scale (cm, min--h) grown drops
+settle into a free-water layer. Two clocks result: bulk separation is over in
+minutes, while optical clearing waits for a sub-100-nm fines fog. The
+dimensionless electrocoalescence number $\Lambda$ gates the entire chain.}
+\label{fig:mechanism}
+\end{figure*}
+
+\section{Results}
+
+\subsection{A framework built from setup facts alone}
+
+We consider the batch configuration of Ref.~\cite{panat2025}: 60\,ml of
+water-in-hexadecane emulsion (0.5\,M brine, 1\% Span~80, water cut
+$\phi=2\%$, DLS mean diameter 175\,nm, lognormal width $\sigma_g=1.35$) in a
+cubic cell of depth $H=3.37$\,cm, under a corona air-gap field of up to
+$E=7.5$\,kV/cm in the oil. Material properties (viscosity $\mu$, densities,
+permittivity $\varepsilon_{\mathrm{oil}}$, interfacial tension) are standard
+literature values (Methods). Crucially, no measured demulsification kinetics
+enter the model at any point; an older reduced-order model calibrated to the
+measured timescale was deliberately quarantined.
+
+One further setup fact does quantitative work. The emulsion shows no visible
+phase separation for months without a field. Since the zero-field Brownian
+encounter rate is known, stability over a shelf life $t_s$ bounds the
+per-encounter coalescence probability, and hence the surfactant film barrier:
+$\Delta G \gtrsim k_BT\ln(K_Bn_0t_s)\approx 19\,k_BT$ (instantiating
+``several months'' as three; the criterion, fewer than one coalescence per
+drop, is stricter than ``no visible separation'' and thus a conservative
+lower bound). We carry
+$\Delta G=20$--$30\,k_BT$ as the honest uncertainty band; Span-type
+monolayers stiffened by electrolytes sit in this range~\cite{opawale1998}.
+
+The pair physics is assembled from established elements: conductor-limit
+induced dipoles~\cite{jones1995}, Brownian transport with
+dipolar-capture enhancement (a Fuchs-type factor
+$\sim\Lambda^{1/3}$)~\cite{fuchs1934,friedlander2000}, near-contact
+amplification of the conductor--conductor attraction over the point-dipole
+law~\cite{davis1964,zhang1995}, film-drainage barrier crossing, and, once
+drops grow past a micron, sweep coagulation: settling drops collect smaller
+partners from a capture tube whose radius is bounded jointly by energy
+($U(r)\!=\!k_BT$) and by drift-versus-transit kinetics
+(Methods)~\cite{pruppacher1997,friedlander2000}. Merges of conducting drops
+in strong fields can also abort, ejecting charged daughter droplets; this
+partial-coalescence channel is gated by the electric Bond number at contact
+and by charge relaxation in the drop~\cite{ristenpart2009,bird2009,
+mousavichoubeh2011}, and is retained because it carries the salinity
+dependence discussed below.
+
+\subsection{One number gates the cascade}
+
+Every stage of the chain is a contest between the induced-dipole bond and
+thermal noise. Dividing the aligned-pair contact energy by $k_BT$ defines
+the electrocoalescence number,
+\begin{equation}
+\Lambda \;=\; \frac{\pi\,\varepsilon_0\,\varepsilon_{\mathrm{oil}}\,K^2E^2a^3}{k_BT},
+\label{eq:lambda}
+\end{equation}
+with $E$ the field in the oil, $a$ the droplet radius, and $K\!\to\!1$ the
+Clausius--Mossotti factor in the conductor limit. $\Lambda$ is the droplet
+analogue of the dipolar coupling constant governing chain formation in
+electrorheological fluids~\cite{halsey1990}. Coalescence, however, must also
+defeat the film barrier. Two amplifications act at contact: a large drop
+presses a small one with $\sim$8$\times$ the equal-pair energy (the
+``scavenging rule'', Methods), and the near-contact conductor interaction
+exceeds the point-dipole law by a factor $A_{nc}\!\approx\!2$--8
+\cite{davis1964}. The go/no-go threshold is therefore
+\begin{equation}
+\Lambda^{*}\;\approx\;\frac{\Delta G/k_BT}{8\,A_{nc}}\;\approx\;0.8
+\qquad(\text{band }0.3\text{--}2),
+\label{eq:lambdastar}
+\end{equation}
+predicted before any kinetic data are consulted. The two amplifications
+are not strictly independent (both are near-contact corrections to the
+point-dipole law), so their product should be read as a heuristic
+16--64$\times$ band whose uncertainty the threshold inherits; ignition at
+$\Lambda\sim\Lambda^{*}$ additionally relies on the large-size tail of
+the initial distribution, since an equal median pair at threshold still
+faces a substantial residual barrier. Since
+$\Lambda\!\propto\!E^2a^3$, the critical field steepens as droplets shrink,
+$E_{\mathrm{crit}}\!\propto\!a^{-3/2}$ (Fig.~\ref{fig:map}): the compact
+statement of why nanoemulsions defeat conventional electrocoalescers and
+why the high-field air-gap architecture succeeds.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_map.png}
+\caption{\textbf{The feasibility map.} The $\Lambda^{*}$ boundary
+($E\!\sim\!a^{-3/2}$; orange band spans $\Lambda^{*}=0.3$--2) in
+field-versus-size space, with operating points from
+Ref.~\cite{panat2025}: filled, cleared; open, remained milky. The sweep's
+cleared points bracket the boundary band, placing the operational
+threshold at the band's lower edge; a 600\,nm emulsion clears at modest
+fields because $\Lambda\!\propto\!a^{3}$.}
+\label{fig:map}
+\end{figure}
+
+\subsection{Calibration-free prediction, three ways}
+
+To make the prediction falsifiable we froze all model choices before
+consulting the measured kinetics, and solved the same physics by three
+machineries with disjoint numerical failure modes
+(Fig.~\ref{fig:protocol}). We stress that this is a no-calibration rather
+than a blind protocol: one author (S.P.) performed the source experiments
+and knew the measured clearing time. The safeguards are procedural, namely
+that no measured kinetic quantity enters the model at any point, that an
+older reduced-order model calibrated to the measured timescale was
+quarantined, and that all model choices and the three predicted numbers
+were fixed, under version control, before any comparison to data. The
+result therefore demonstrates that the framework requires no kinetic
+calibration, not that the modellers were ignorant of the answer; a
+hash-committed, pre-experiment version of this protocol would be stronger
+and we recommend it for future systems.
+
+\emph{Route 1, analytic cascade.} Closed-form staging: a Brownian gate
+($\Lambda=5.2$ at the 87.5\,nm median radius and 7.5\,kV/cm: open;
+$\Lambda=7.8$ at the 100\,nm mean radius used for the data collapse), barrier-limited ignition
+(seconds), a growth ladder summing $\sim$25 volume-doubling times with
+Brownian-capture and sweep transport, and a gravity endgame at the handoff
+radius minimizing total time. Being single-sized, this route can only time the \emph{mass} clock:
+5\,min (brine, barrier 20--25\,$k_BT$), rising to $\sim$40\,min at the
+30\,$k_BT$ barrier edge.
+
+\emph{Route 2, population balance.} A 123-bin sectional
+Smoluchowski model~\cite{smoluchowski1917,kumar1996} with coagulation,
+Stokes settling loss, a daughter-droplet source from partial coalescence,
+and the endpoint evaluated exactly as defined operationally: relative
+transmittance from full Mie scattering~\cite{bohren1983} reaching 95\% over
+a 1\,cm path. Numerically, merges between comparable sizes are discrete
+fixed-pivot events while accretion of much smaller partners is treated as
+continuous growth (upwind advection in size space), which removes an
+otherwise fatal stiffness; mass is conserved to 1\%.
+
+\emph{Route 3, stochastic simulation with a learning agent.} An independent
+super-droplet Monte Carlo implementation~\cite{shima2009} exposes only
+operator-visible observables (turbidity, coarse mean size, free-water-layer
+height) to a tabular reinforcement-learning agent~\cite{sutton2018} that
+selects the field level every 30\,s under an arcing risk above 8\,kV/cm.
+With reward equal to negative elapsed time, the learned value of the initial
+state \emph{is} the predicted clearing time. The agent independently
+rediscovers the experimental operating point, running at the arcing edge.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig2_protocol.png}
+\caption{\textbf{The blind-prediction protocol.} Setup facts (materials,
+geometry, device characterization, size distribution, and a film-barrier
+bound from zero-field shelf life) feed three independent routes: a
+closed-form cascade, a population balance with Mie optics, and a
+super-droplet Monte Carlo rig driven by a reinforcement-learning agent.
+Measured kinetics remain quarantined until all three predictions are frozen.}
+\label{fig:protocol}
+\end{figure*}
+
+The three routes agree with one another within 21\% (range over mean of
+the central estimates) on the optical clock: population balance 110\,min
+for brine and 90\,min for DI water (film-barrier band widens the brine
+value to 78\,min--3.3\,h), fixed-field super-droplet Monte Carlo 102\,min (median over 20 random
+seeds, observed range 81--273\,min), and learned value
+estimate 125\,min. Throughout, the quoted prediction band 90--125\,min is
+the range of central estimates across routes and water phases; it excludes
+the film-barrier systematic, which is reported separately. Cross-route disagreements during development were diagnostic
+rather than cosmetic: they exposed a mass leak at the size-grid boundary, an
+event-rate undercount in rare sweep interactions, and the stiffness
+pathology above, all of which a single-method study would have shipped
+silently. A thirteen-point verification suite (dimensional checks against raw
+constants, optical limits, grid-convergence, collapse statistics, and an
+AST-based solver-independence audit) accompanies the code and returns a
+nonzero exit status on any failure.
+
+\subsection{Two clocks, one process}
+
+The framework's central structural prediction is that ``separated'' is two
+different claims (Fig.~\ref{fig:dynamics}). The cascade is parallel: all
+pairs merge simultaneously, the population halves per generation, and only
+$\log_2(4\times10^{7})\!\approx\!25$ generations connect 175\,nm to settling
+sizes. Consequently bulk separation is fast: in the population balance, 97\% of
+the water reaches the free layer within $\sim$2\,min at 7.5\,kV/cm (the
+analytic route's central estimate is 5\,min). The transmittance endpoint
+is another matter. A residual fog holding under half a percent of the water,
+droplets too small for even the amplified contact energy to open the film
+barrier, scatters strongly enough to keep the sample milky, and it can no
+longer coalesce in parallel: each straggler waits alone for a rare
+collector. Logarithmic physics for the bulk; linear waiting for the tail.
+The two clocks differ by a factor of 20--50, which is precisely why clearing
+times have resisted single-droplet reasoning: the eye's endpoint is a
+statement about the smallest decile of the initial size distribution, not
+about the bulk. Staged kinetics with a slow residual-emulsion tail have been
+reported in population-balance studies of microscale
+electrocoalescers~\cite{sharma2023}; the present contribution is to make
+the final stage quantitative through the scattering optics of the fines and
+to show it is the operational endpoint's rate-limiting step.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{figs/fig_cascade.png}\\[4pt]
+\includegraphics[width=0.94\textwidth]{figs/fig_transients.png}
+\caption{\textbf{Cascade and clocks (population balance, 7.5\,kV/cm).}
+Top: the volume-weighted size distribution marches through 25 doublings
+within minutes. Bottom left: the optical clock; droplet optical depth decays
+toward the 95\%-transmittance threshold (dashed) in 90--110\,min, brine
+(orange) slower than DI water (blue). Bottom right: the mass clock; resolved
+water exceeds 97\% within minutes for both phases.}
+\label{fig:dynamics}
+\end{figure*}
+
+\subsection{The data collapse onto one line}
+
+Reference~\cite{panat2025} reports batch demulsification times over a
+threefold voltage sweep, fitted there as $t\!\sim\!V^{-1.91}$. At fixed
+droplet size the collapse below is therefore a dimensionless
+\emph{restatement} of that fit rather than an independent measurement; its
+new content is the value and tightness of the constant, the a-priori
+threshold it terminates on, and the field-reading discrimination it
+enables. Digitizing the seven published points and converting voltage to $\Lambda$
+(field read as $V/d$; mean droplet radius $a=100$\,nm per the source's
+caption; electrode gap $d=5.5$\,cm per its Methods) yields
+\begin{equation}
+t_{95}\cdot\Lambda \;=\; 23.5\ \text{min}
+\quad(\text{RMS scatter } 5\%,\ \text{range } 21.5\text{--}25.5)
+\label{eq:collapse}
+\end{equation}
+across the sweep (Fig.~\ref{fig:collapse}). Equivalently, the digitized
+exponent is $t\propto V^{-1.96\pm0.06}$, statistically indistinguishable
+from the $E^{-2}$ scaling that $\Lambda$ requires. Three qualifications
+bound this result. Because only $V$ varies across the sweep, the collapse
+constrains the field exponent of Eq.~\ref{eq:lambda} and nothing else; the
+$a^{3}$ and material-property content is untested by these data. The
+constant carries a systematic uncertainty of a factor $\approx$2 beyond
+its 5\% scatter, since $C\propto a^{3}/d^{2}$ and depends on the choice
+of size-distribution moment. And the scatter itself is consistent with
+digitization noise alone (a Monte Carlo with 5\% reading error in $t$ and
+2\% in $V$ reproduces it), so it should be read as an upper bound on the
+law's intrinsic scatter. Three further points
+follow. (i)~The lowest voltage that still cleared sits at $\Lambda\approx0.26$,
+and three of the seven cleared points lie below the central
+$\Lambda^{*}=0.8$: the data are consistent with the a-priori threshold
+\emph{band} of Eq.~\ref{eq:lambdastar} only at its lower edge, indicating
+that the central near-contact amplification is too conservative and the
+true amplification is nearer the top of its 2--8 range. Below corona onset,
+where the field in the oil is negligible and $\Lambda$ is effectively
+zero, no clearing was observed in 110\,min, consistent with the gate. (ii)~The collapse arbitrates a genuine ambiguity in the device physics.
+Writing the field as $(V-V_0)/d$ and profiling the collapse quality over
+the onset offset $V_0$ gives RMS spreads of 5.2, 8.9, 15.6, 33, and 58\%
+at $V_0=0$, 1, 2, 4, and 6.3\,kV: the data prefer $V_0=0$ and exclude
+offsets beyond $\sim$1\,kV at the level of the observed scatter,
+consistent with $V/d$ approximating the average field in the oil, as the
+device's current--voltage characterization also indicates (the offset test
+varies $V_0$ only; it does not by itself pin the gap).
+(The corona \emph{onset} of the source device remains physically real;
+what the data reject is a large standing offset in the oil-field reading
+above onset.)
+(iii)~The collapse does \emph{not} extend to the water-cut sweep of
+Ref.~\cite{panat2025}, nor should it: $\Lambda$ answers whether a pair can
+merge, not how much water must move or how much light must clear; the
+water-cut axis requires a second, load-like group. Two further disclosures are essential. The collapse validates the
+$E^{-2}$ scaling but \emph{not} the framework's absolute kinetics across
+the sweep: at the sweep's low-field points our barrier-gated model predicts
+clearing times that are orders of magnitude too long (the exponential gate
+$e^{A_{nc}\Lambda-\Delta G/k_BT}$ effectively closes below
+$\sim$3\,kV/cm at this droplet size), whereas the experiments cleared in
+11--95\,min. The model's absolute kinetics are supported only near the
+high-field reference condition; the sweep data falsify the central barrier
+calibration at low fields, again pointing to stronger near-contact
+amplification or to field-driven transport (electrohydrodynamic
+circulation) that bypasses the gate. And the collapse is licensed only
+within the sweep's range: extrapolating $t=23.5\,\text{min}/\Lambda$ to
+the reference batch condition predicts minutes against the $\sim$60\,min
+measured there, indicating that the sweep and the reference batch differ in
+effective field or geometry in a way the published information does not
+fully constrain. Resolving these tensions requires instrumented-field
+source data, and we flag them as the sharpest open questions the
+dimensionless analysis exposes.
+
+On the absolute number the model \emph{overpredicts}: the central band of
+90--125\,min lies a factor 1.5--2.1 above the single measured value of
+$\sim$60\,min, with no stated experimental uncertainty or replicates to
+compare against, so the comparison establishes order-of-magnitude
+correctness with a systematic slow bias, not quantitative validation. Two
+mitigating observations bound its meaning. The omitted transport channels
+(electrohydrodynamic stirring, documented directly by the source
+experiments) act in the observed direction. And the endpoint itself is
+stiff: moving the transmittance threshold by one percentage point moves the
+predicted $t_{95}$ by $-27\%$/$+46\%$ (81, 110, and 161\,min at 94, 95,
+and 96\%), so part of any gap at this endpoint reflects the endpoint's own
+sensitivity rather than cascade physics.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/fig_lambda.png}
+\caption{\textbf{Validation against published data.} Left: the seven
+digitized voltage-sweep points of Ref.~\cite{panat2025} against
+$t=23.5\,\text{min}/\Lambda$; the flow-cell demonstration (open green) lies a factor 2.5 above the
+extrapolated line, and the batch reference measurement (orange cross) and
+the predicted band at the same $\Lambda$ lie an order of magnitude above
+it, the extrapolation tension discussed in the text. Grey band: below
+corona onset, no clearing observed; dotted line: the a-priori threshold
+$\Lambda^{*}$. Right: the collapse, $t\cdot\Lambda$ with 5\% RMS
+scatter.}
+\label{fig:collapse}
+\end{figure*}
+
+\subsection{Why brine is the stubborn phase}
+
+A bench observation supplied as direction only, never fitted, is that saline
+droplets are markedly more stable under the field than fresh water. The
+framework was given the two literature mechanisms and the slowdown emerged
+in every route. First, electrolytes stiffen Span-type interfacial films:
+salting-out packs the sorbitan monolayer and raises its mechanical strength
+\cite{opawale1998}, entering here as a few additional $k_BT$ of barrier
+whose effect is exponential and therefore mild at 7.5\,kV/cm but decisive at
+low field. Second, brine's conductivity ($\sim$4.6\,S/m) allows charge to
+transfer within the coalescence bridge, so that high-field merges of grown
+drops abort into daughter droplets~\cite{ristenpart2009,bird2009,
+mousavichoubeh2011}; fresh water relaxes too slowly to bounce. The net
+prediction, brine slower by $\sim$20\% at 7.5\,kV/cm (110 vs 90\,min) with
+the penalty concentrated in the fines tail and growing toward lower fields,
+is testable: the film mechanism predicts a smooth, roughly exponential
+slowdown with ionic strength, while the bounce mechanism concentrates its
+damage at high field and late times, and each can be isolated by a salinity
+sweep at fixed field. We note that a naive electrostatic expectation
+(saltier drops polarize more strongly) predicts the opposite sign and is
+contradicted by the observation: above a conductivity of order
+$10\,\sigma_{\mathrm{oil}}$, the dipole is geometry-limited and salinity
+adds nothing to the driving force.
+
+\section{Discussion}
+
+The results support a simple claim with practical consequences: the clearing
+time of an electrostatically demulsified nanoemulsion is predictable from
+setup information alone, to engineering accuracy, and is organized by one
+dimensionless group. The two-clocks decomposition explains a long-standing
+frustration, namely why single-droplet intuition fails to anticipate
+macroscopic clearing: the operational endpoint is governed by the fines
+tail, an emergent population property. The $\Lambda$ framework converts
+device design questions into geometry on the feasibility map: droplet size
+sets the required field through $E_{\mathrm{crit}}\!\propto\!a^{-3/2}$, and
+the measured collapse $t\!\approx\!23.5\,\text{min}/\Lambda$ prices the
+speed of any operating point for this emulsion class.
+
+Three limitations bound the claims. Validation rests on one experimental
+system (seven voltage points, one absolute batch time, one flow-cell time);
+the near-contact amplification $A_{nc}$ is an order-one parameter carried as
+a band rather than computed, and it sets the precise location of the
+feasibility cliff; and convective transport (electrohydrodynamic
+circulation, shear in flow cells) is omitted, plausibly explaining both the
+factor-of-two slow bias and the flow cell's additional speed. Each
+limitation is also a concrete measurement: dynamic light scattering on the
+residual haze after clearing would locate the fines cliff and hence
+$A_{nc}$; a salinity sweep at fixed field would separate the two brine
+mechanisms; and the learning agent's discovery that, under strong partial
+coalescence, a field \emph{schedule} (ignite hard, then throttle to stop
+bouncing) beats any constant field is directly testable with a programmable
+supply.
+
+A further caveat: the three routes share the same pair-physics kernel
+layer, so they are three population-integration schemes over a common,
+separately verified closure set; their mutual agreement (21\%) guards
+against discretization and implementation error, which is exactly what the
+development history showed it catching, and not against a shared wrong
+model. Only the comparison with measurement tests the physics. More broadly, the no-calibration, triangulated protocol used here, three solvers
+with disjoint failure modes, predictions frozen before data contact, and a
+public verification suite, is inexpensive discipline for soft-matter
+kinetics modeling generally, where post-hoc calibration is endemic and
+plausible-but-wrong models are cheap to produce.
+
+\section{Materials and Methods}
+
+\subsection{Setup parameters}
+All inputs are setup facts from Ref.~\cite{panat2025} or literature property
+values: hexadecane $\mu=3.03$\,mPa\,s, $\rho_o=773$\,kg/m$^3$,
+$\varepsilon_{\mathrm{oil}}=2.05$, $n_o=1.434$; 0.5\,M brine
+$\rho_w=1017$\,kg/m$^3$, $n_w=1.338$, $\sigma_w=4.6$\,S/m; interfacial
+tension with Span~80, $\gamma=4$\,mN/m; oil conductivity
+$2\times10^{-8}$\,S/m; cell depth $H=3.37$\,cm; optical path $L=1$\,cm;
+$T=298$\,K. Initial condition: lognormal, median diameter 175\,nm,
+$\sigma_g=1.35$, $\phi=0.02$.
+
+\subsection{Pair kernels}
+Aligned-pair contact energy
+$U_{ij}=8\pi\varepsilon_0\varepsilon_{\mathrm{oil}}K^2E^2a_i^3a_j^3/(a_i+a_j)^3$,
+reducing to $\Lambda k_BT$ for equal spheres (Eq.~\ref{eq:lambda}); for
+$a_j\!\gg\!a_i$, $U\!\to\!8\Lambda_i k_BT$ (the scavenging rule). Transport:
+Brownian kernel $K_B=(2k_BT/3\mu)(a_i+a_j)(a_i^{-1}+a_j^{-1})$ enhanced by
+the capture factor $\max(1,1.12\,\Lambda_{ij}^{1/3})$~\cite{fuchs1934}, plus
+sweep coagulation $K_g=\pi R_c^2|\Delta v_{\mathrm{St}}|$ with capture
+radius $R_c=\min\!\big(\Lambda_{ij}^{1/3}(a_i{+}a_j),\,(10A/\Delta
+v)^{1/4}\big)$, where $A=4\varepsilon_0\varepsilon_{\mathrm{oil}}K^2E^2
+a_i^3a_j^3/(\mu\,a_{\min})$ is the dipole-drift coefficient; the second
+bound enforces that a partner must drift in within the transit time
+\cite{pruppacher1997}. Coalescence probability per encounter:
+$\min\{1,\exp(A_{nc}\Lambda_{ij}-\Delta G/k_BT)\}$ with $A_{nc}=4$ central
+(2--8 band)~\cite{davis1964}. Partial coalescence: probability
+$g_\sigma\,\mathrm{Bo}^2/(\mathrm{Bo}^2+\mathrm{Bo}_c^2)$ with electric Bond
+number $\mathrm{Bo}=\varepsilon_0\varepsilon_{\mathrm{oil}}(3E)^2
+a_{\min}/\gamma$ and charge-supply gate
+$g_\sigma=\tau_b/(\tau_b+\tau_e)$. This functional form, the critical
+value $\mathrm{Bo}_c=0.1$, the local-field factor 3, the $+4\,k_BT$ brine
+barrier increment, and the daughter recycling rule (half the smaller
+drop's volume at half its radius) are our model constructions, motivated by
+but not derived from Refs.~\cite{bird2009,ristenpart2009,
+mousavichoubeh2011,opawale1998}; they carry order-one uncertainty and are
+exercised in the sensitivity bands. Settling:
+Stokes, $v_{\mathrm{St}}=2\Delta\rho g a^2/9\mu$; removal rate $v/H$.
+
+\subsection{Route 1: analytic cascade}
+Ignition frequency from the lognormal-averaged kernel; growth as an explicit
+octave ladder, $t_{\mathrm{growth}}=\sum_k\tau_{\mathrm{oct}}(a_k)$ with
+$\tau_{\mathrm{oct}}=2/(K_{\mathrm{eff}}n)$ and $n=3\phi/4\pi a^3$;
+gravity endgame $t_{\mathrm{settle}}=(H/2)/v_{\mathrm{St}}(a_h)$ with
+handoff radius $a_h$ minimizing the sum. The ladder is top-heavy in the
+Brownian regime and bottom-heavy in the sweep regime, so no single-rung
+approximation is valid.
+
+\subsection{Route 2: population balance}
+Sectional Smoluchowski equations on 123 geometric bins (25\,nm--300\,\textmu m),
+fixed-pivot deposition~\cite{kumar1996} for comparable-size merges; accretion
+(mass ratio $<10^{-2}$) treated as continuous growth via upwind advection in
+size space with number conservation; overflow beyond the top bin routed to
+the resolved pool. Explicit conservative time stepping with
+$\Delta t\le0.2/\max(\text{per-particle rate})$; the global mass audit
+closes at 0.99, and refining the grid from 123 to 246 bins shifts $t_{95}$
+by $+3.8\%$, so discretization error is small against the reported bands.
+Endpoint stiffness is reported in Results ($t_{95}=81$, 110, 161\,min at
+thresholds of 94, 95, 96\%).
+Endpoint: $T_{\mathrm{rel}}=\exp[-L\sum_in_iC_{\mathrm{sca}}(a_i)]$ with
+Mie cross sections (relative index 0.933)~\cite{bohren1983}.
+
+\subsection{Route 3: super-droplet Monte Carlo and learning agent}
+512 computational droplets with multiplicities; pair sampling with
+multiple-coalescence correction~\cite{shima2009}; independent
+anomalous-diffraction optics~\cite{vandehulst1957}. The agent observes
+(turbidity bin, mean-size bin, resolved-layer quartile), selects among six
+field levels each 30\,s (arc risk above 8\,kV/cm), and is trained by
+every-visit Monte Carlo control with constant step
+size~\cite{sutton2018} (800 episodes, $\epsilon$-greedy, undiscounted);
+in our experiments one-step Q-learning converged poorly here because the
+near-self-transition ``field off'' action remains spuriously competitive
+under bootstrapping. Predictions: the greedy-rollout distribution and
+$-\max_aQ(s_0,a)$, the latter carrying a maximization bias toward
+optimistic times that we note explicitly.
+
+\subsection{Verification and data}
+A twelve-check suite verifies dimensional arithmetic against raw constants,
+Mie limits (Rayleigh and geometric), Stokes values, initial opacity against
+the reported 0\% transmittance, zero-field stability, the collapse
+statistics, the field-reading discrimination, and solver independence. The
+seven voltage-sweep points were digitized from Fig.~4C of
+Ref.~\cite{panat2025} (gap 5.5\,cm per its Methods; field read as $V/d$ per
+its Fig.~4B). All code, parameters, and figure-generation scripts:
+\url{https://github.com/sreedath/emulsion-clock}.
+
+\begin{thebibliography}{99}\small
+\bibitem{eow2001} J.~S. Eow, M.~Ghadiri, A.~O. Sharif, T.~J. Williams,
+Electrostatic enhancement of coalescence of water droplets in oil: a review
+of the current understanding. \emph{Chem. Eng. J.} \textbf{84}, 173--192
+(2001).
+\bibitem{tadros2009} T.~F. Tadros, \emph{Emulsion Science and Technology}
+(Wiley-VCH, Weinheim, 2009).
+\bibitem{atten1993} P.~Atten, Electrocoalescence of water droplets in an
+insulating liquid. \emph{J. Electrostat.} \textbf{30}, 259--269 (1993).
+\bibitem{panat2025} S.~Panat \emph{et al.}, Non-Laplacian air-gap
+electrostatics for high-field oil--water nanoemulsion separation.
+\emph{Sci. Adv.} \textbf{11}, eadz6233 (2025).
+\bibitem{zhang1995} X.~Zhang, O.~A. Basaran, R.~M. Wham, Theoretical
+prediction of electric field-enhanced coalescence of spherical drops.
+\emph{AIChE J.} \textbf{41}, 1629--1639 (1995).
+\bibitem{jones1995} T.~B. Jones, \emph{Electromechanics of Particles}
+(Cambridge Univ. Press, Cambridge, 1995).
+\bibitem{halsey1990} T.~C. Halsey, W.~Toor, Structure of electrorheological
+fluids. \emph{Phys. Rev. Lett.} \textbf{65}, 2820--2823 (1990).
+\bibitem{opawale1998} F.~O. Opawale, D.~J. Burgess, Influence of interfacial
+properties of lipophilic surfactants on water-in-oil emulsion stability.
+\emph{J. Colloid Interface Sci.} \textbf{197}, 142--150 (1998).
+\bibitem{fuchs1934} N.~Fuchs, \"Uber die Stabilit\"at und Aufladung der
+Aerosole. \emph{Z. Phys.} \textbf{89}, 736--743 (1934).
+\bibitem{friedlander2000} S.~K. Friedlander, \emph{Smoke, Dust, and Haze:
+Fundamentals of Aerosol Dynamics}, 2nd ed. (Oxford Univ. Press, New York,
+2000).
+\bibitem{davis1964} M.~H. Davis, Two charged spherical conductors in a
+uniform electric field: forces and field strength. \emph{Q. J. Mech. Appl.
+Math.} \textbf{17}, 499--511 (1964).
+\bibitem{pruppacher1997} H.~R. Pruppacher, J.~D. Klett, \emph{Microphysics
+of Clouds and Precipitation}, 2nd ed. (Kluwer, Dordrecht, 1997).
+\bibitem{ristenpart2009} W.~D. Ristenpart, J.~C. Bird, A.~Belmonte,
+F.~Dollar, H.~A. Stone, Non-coalescence of oppositely charged drops.
+\emph{Nature} \textbf{461}, 377--380 (2009).
+\bibitem{bird2009} J.~C. Bird, W.~D. Ristenpart, A.~Belmonte, H.~A. Stone,
+Critical angle for electrically driven coalescence of two conical droplets.
+\emph{Phys. Rev. Lett.} \textbf{103}, 164502 (2009).
+\bibitem{mousavichoubeh2011} M.~Mousavichoubeh, M.~Ghadiri,
+M.~Shariaty-Niassar, Electro-coalescence of an aqueous droplet at an
+oil--water interface. \emph{Chem. Eng. Process.} \textbf{50}, 338--344
+(2011).
+\bibitem{sharma2023} E.~Sharma, R.~M. Thaokar, Population balance
+modelling of an electrocoalescer. \emph{Chem. Eng. Sci.} \textbf{282},
+119276 (2023).
+\bibitem{anand2019} V.~Anand, R.~Patel, V.~M. Naik, V.~A. Juvekar,
+R.~M. Thaokar, Modelling and particle based simulation of
+electro-coalescence of a water-in-oil emulsion. \emph{Comput. Chem. Eng.}
+\textbf{121}, 608--623 (2019).
+\bibitem{su2023} X.~Su, X.~Yang, Y.~Yu, F.~Gao, X.~Wang, A simulation
+approach to predict electrostatic coalescence performance of water-in-oil
+emulsion using population balance model. \emph{Sep. Sci. Technol.}
+\textbf{58}, 538--550 (2023).
+\bibitem{rahmani2023} M.~Rahmani, N.~Tahouni, M.~Abbasi,
+M.~H. Panjeshahi, Modeling and performance analysis of electrostatic
+desalter using combined CFD-PBM method. \emph{Chem. Eng. Res. Des.}
+\textbf{194}, 121--135 (2023).
+\bibitem{khajeh2020} A.~Khajehesamedini \emph{et al.}, Development of
+coalescence and capture kernels for the electrocoalescence process based on
+batch experiments. \emph{Ind. Eng. Chem. Res.} \textbf{59}, 1277--1297
+(2020).
+\bibitem{smoluchowski1917} M.~von Smoluchowski, Versuch einer mathematischen
+Theorie der Koagulationskinetik kolloider L\"osungen. \emph{Z. Phys. Chem.}
+\textbf{92}, 129--168 (1917).
+\bibitem{kumar1996} S.~Kumar, D.~Ramkrishna, On the solution of population
+balance equations by discretization--I. A fixed pivot technique.
+\emph{Chem. Eng. Sci.} \textbf{51}, 1311--1332 (1996).
+\bibitem{bohren1983} C.~F. Bohren, D.~R. Huffman, \emph{Absorption and
+Scattering of Light by Small Particles} (Wiley, New York, 1983).
+\bibitem{vandehulst1957} H.~C. van de Hulst, \emph{Light Scattering by Small
+Particles} (Wiley, New York, 1957).
+\bibitem{shima2009} S.~Shima, K.~Kusano, A.~Kawano, T.~Sugiyama,
+S.~Kawahara, The super-droplet method for the numerical simulation of
+clouds and precipitation: a particle-based and probabilistic microphysics
+model coupled with a non-hydrostatic model. \emph{Q. J. R. Meteorol. Soc.} \textbf{135},
+1307--1320 (2009).
+\bibitem{sutton2018} R.~S. Sutton, A.~G. Barto, \emph{Reinforcement
+Learning: An Introduction}, 2nd ed. (MIT Press, Cambridge, MA, 2018).
+\bibitem{chesters1991} A.~K. Chesters, The modelling of coalescence
+processes in fluid-liquid dispersions: a review of current understanding.
+\emph{Chem. Eng. Res. Des.} \textbf{69}, 259--270 (1991).
+\bibitem{melcher1969} J.~R. Melcher, G.~I. Taylor, Electrohydrodynamics: a
+review of the role of interfacial shear stresses. \emph{Annu. Rev. Fluid
+Mech.} \textbf{1}, 111--146 (1969).
+\bibitem{vrij1966} A.~Vrij, Possible mechanism for the spontaneous rupture
+of thin, free liquid films. \emph{Discuss. Faraday Soc.} \textbf{42},
+23--33 (1966).
+\end{thebibliography}
+
+\vspace{6pt}
+\noindent\textbf{Acknowledgments.} The authors thank the Vizuara AI Labs
+team for infrastructure support.
+\smallskip
+
+\noindent\textbf{Author contributions.} S.P. conceived the study, performed
+the source experiments, and supplied the blind-prediction constraints;
+S.P., R.D., and R.D. developed the framework, performed the computations,
+and wrote the manuscript.
+\smallskip
+
+\noindent\textbf{Data and code availability.} All code, inputs, digitized
+data, and figure-generation scripts, under version control with the frozen
+prediction state, are available at
+\url{https://github.com/sreedath/emulsion-clock}. An interactive companion
+is available at
+\url{https://demulsification-prediction.vercel.app}.
+
+\end{document}

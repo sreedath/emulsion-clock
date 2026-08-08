@@ -72,7 +72,7 @@ def main():
     # 5. ADA vs full Mie agreement at the starting size
     c_mie = mie_qext_qsca(a)[1] * np.pi * a * a
     c_ada = float(ada_csca(np.array([a]))[0])
-    check("ADA vs Mie at 87.5 nm", 0.2 < c_ada / c_mie < 5.0,
+    check("ADA vs Mie at 87.5 nm", 0.5 < c_ada / c_mie < 3.5,
           f"ratio {c_ada/c_mie:.2f} (independent optics, order-1 agreement)")
 
     # 6. Initial opacity: DLS reported 0% transmittance through 1 cm
@@ -93,8 +93,9 @@ def main():
                * (100e-9) ** 3 / kT())
     c_prod = times * lam_pts
     spread = np.std(c_prod) / np.mean(c_prod)
-    check("t*Lambda collapse", spread < 0.10,
-          f"C = {np.mean(c_prod):.1f} min, spread {spread:.1%}")
+    check("t*Lambda collapse", spread < 0.06,
+          f"C = {np.mean(c_prod):.1f} min, RMS scatter {spread:.1%}, "
+          f"range {c_prod.min():.1f}-{c_prod.max():.1f}")
     slope = np.polyfit(np.log(volts), np.log(times), 1)[0]
     check("Digitized points reproduce paper exponent",
           -2.1 < slope < -1.7,
@@ -108,16 +109,50 @@ def main():
     check("Offset reading fails to collapse", spread_off > 0.4,
           f"corona-offset spread {spread_off:.0%} vs V/d {spread:.0%}")
 
-    # 10. Method independence: no cross-imports of solver code
-    out = subprocess.run(
-        ["grep", "-l", "import pbe_sim", "analytic_model.py", "rl_env.py",
-         "rl_train.py"], capture_output=True, text=True)
-    check("Solver independence", out.stdout.strip() == "",
-          "analytic and RL never import the PBE solver")
+    # 10. Method independence: AST-based import audit. The routes SHARE the
+    # kernel layer (kinetics/params/salinity) by design; what must be
+    # disjoint is the population-integration code.
+    import ast
+    solver_mods = {"pbe_sim": ["analytic_model.py", "rl_env.py",
+                               "rl_train.py"],
+                   "analytic_model": ["pbe_sim.py", "rl_env.py",
+                                      "rl_train.py"],
+                   "rl_env": ["pbe_sim.py", "analytic_model.py"]}
+    cross = []
+    for mod, files in solver_mods.items():
+        for fname in files:
+            tree = ast.parse(open(fname).read())
+            for node in ast.walk(tree):
+                names = []
+                if isinstance(node, ast.Import):
+                    names = [a.name for a in node.names]
+                elif isinstance(node, ast.ImportFrom) and node.module:
+                    names = [node.module]
+                if mod in names:
+                    cross.append(f"{fname} imports {mod}")
+    check("Solver-layer independence (AST)", not cross,
+          "; ".join(cross) if cross
+          else "no route imports another route's solver "
+               "(kernel layer intentionally shared)")
+
+    # 11. PBE grid convergence: 123 vs 165 bins within 5%
+    import pbe_sim
+    from params import BARRIER_KT_BAND, E_FIELDS
+    from salinity import BRINE_05M
+    r1 = pbe_sim.PBEModel(E_FIELDS["max_safe_7.5kV_cm"], BRINE_05M,
+                          BARRIER_KT_BAND[1]).run()
+    pbe_sim.N_BINS = 165
+    r2 = pbe_sim.PBEModel(E_FIELDS["max_safe_7.5kV_cm"], BRINE_05M,
+                          BARRIER_KT_BAND[1]).run()
+    pbe_sim.N_BINS = 123
+    shift = abs(r2["t_clear_s"] / r1["t_clear_s"] - 1)
+    check("PBE grid convergence", shift < 0.05,
+          f"t95 shift {shift:.1%} for 123 -> 165 bins")
 
     n_pass = sum(1 for _, ok, _ in CHECKS if ok)
     print(f"\n{n_pass}/{len(CHECKS)} checks passed")
-    return CHECKS
+    import sys
+    sys.exit(0 if n_pass == len(CHECKS) else 1)
 
 
 if __name__ == "__main__":
