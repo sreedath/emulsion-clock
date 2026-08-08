@@ -60,11 +60,13 @@ fresh water. Code and data are openly available.
 \section{Introduction}
 
 Separating emulsified water from oil is a rate-limiting operation across crude
-desalting, produced-water treatment, and waste-oil recycling, and it becomes
-hardest exactly where it matters most: at nanoscale droplet sizes, where
-gravity is powerless and surfactant films render the dispersion metastable for
-months~\cite{eow2001,tadros2009}. Electrocoalescence, driving droplet merger
-with an electric field, is the classical remedy~\cite{atten1993,eow2001}, but
+desalting, produced-water treatment, and waste-oil recycling
+\cite{kokal2005,zolfaghari2016}, and it becomes hardest exactly where it
+matters most: at nanoscale droplet sizes, where gravity is powerless and
+surfactant films render the dispersion metastable for
+months~\cite{eow2001,tadros2009,mason2006,gupta2016}. Electrocoalescence,
+driving droplet merger with an electric field, is the classical
+remedy~\cite{atten1993,eow2001,mhatre2015,less2012}, but
 conventional immersed-electrode devices are capped near 1\,kV/cm by
 shorting through droplet chains. A recently demonstrated non-Laplacian,
 air-gap corona architecture removes that cap and sustains fields up to
@@ -72,9 +74,11 @@ $\sim$7.5\,kV/cm across the emulsion, demulsifying 150--800\,nm water-in-oil
 emulsions without chemical additives~\cite{panat2025}.
 
 The microphysics underlying such devices is well established. A conducting
-aqueous droplet in oil acquires an induced dipole; aligned dipoles attract,
-chain, and press out the intervening oil film; rupture and merger
-follow~\cite{atten1993,zhang1995,jones1995}. What is \emph{not} established is
+aqueous droplet in oil acquires an induced dipole; aligned dipoles attract
+and chain, a fibration known since Winslow's early electrorheology
+\cite{winslow1949,parthasarathy1996}, and press out the intervening oil
+film until rupture and merger follow~\cite{atten1993,zhang1995,jones1995,
+lathamroxburgh1966}. What is \emph{not} established is
 the bridge from this pair-scale picture to the quantity an operator actually
 observes: the time for a milky emulsion to become transparent. The two are
 separated by seven orders of magnitude in droplet count, by a coalescence
@@ -121,16 +125,20 @@ protocol does and does not establish.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig1_mechanism.png}
-\caption{\textbf{The multiscale chain from pair electrostatics to optical
-clearing.} At the pair scale (nm, ns) droplets polarize and chain along the
-field; merger requires squeezing the surfactant-stabilized oil film past a
-20--30\,$k_BT$ barrier. At the population scale (\textmu m, min) coalescence
-proceeds as a parallel cascade: $\sim$25 volume doublings connect 175\,nm to
-settling sizes, with Brownian capture dominating transport below a micron and
-gravitational sweep above it. At the cell scale (cm, min--h) grown drops
-settle into a free-water layer. Two clocks result: bulk separation is over in
-minutes, while optical clearing waits for a sub-100-nm fines fog. The
-dimensionless electrocoalescence number $\Lambda$ gates the entire chain.}
+\caption{\textbf{Setup and the multiscale chain from pair electrostatics
+to optical clearing.} (a)~The non-Laplacian batch configuration of
+Ref.~\cite{panat2025}: a needle emitter array at $+V$ injects space charge
+across an air gap of width $d$ onto a water-in-oil nanoemulsion of depth
+$H$ above a grounded plate, sustaining fields up to
+$E\approx7.5$\,kV/cm in the oil without shorting. (b)~Pair-scale
+electrocoalescence: droplets polarize into induced dipoles, attract and
+chain along the field, drain the intervening oil film against the
+surfactant barrier $\Delta G\approx20$--$30\,k_BT$ (the rate-limiting
+step), and merge. (c)~Population scale: a parallel cascade of $\sim$25
+volume doublings, with gravitational sweep dominating above a micron,
+delivers drops to Stokes settling; two clocks result, with bulk separation
+in minutes and optical clearing delayed by a sub-100-nm residual fog. The
+electrocoalescence number $\Lambda$ gates the entire chain.}
 \label{fig:mechanism}
 \end{figure*}
 
@@ -304,8 +312,8 @@ pairs merge simultaneously, the population halves per generation, and only
 $\log_2(4\times10^{7})\!\approx\!25$ generations connect 175\,nm to settling
 sizes. Consequently bulk separation is fast: in the population balance, 97\% of
 the water reaches the free layer within $\sim$2\,min at 7.5\,kV/cm (the
-analytic route's central estimate is 5\,min). The transmittance endpoint
-is another matter. A residual fog holding under half a percent of the water,
+analytic route's central estimate is 5\,min). The transmittance endpoint, the standard optical route to emulsion
+stability assessment~\cite{mengual1999,reddy1981}, is another matter. A residual fog holding under half a percent of the water,
 droplets too small for even the amplified contact energy to open the film
 barrier, scatters strongly enough to keep the sample milky, and it can no
 longer coalesce in parallel: each straggler waits alone for a rare
@@ -435,11 +443,13 @@ droplets are markedly more stable under the field than fresh water. The
 framework was given the two literature mechanisms and the slowdown emerged
 in every route. First, electrolytes stiffen Span-type interfacial films:
 salting-out packs the sorbitan monolayer and raises its mechanical strength
-\cite{opawale1998}, entering here as a few additional $k_BT$ of barrier
+\cite{opawale1998}, the same interfacial-rigidity route by which asphaltene
+films stabilize crude emulsions~\cite{kilpatrick2012}, entering here as a few additional $k_BT$ of barrier
 whose effect is exponential and therefore mild at 7.5\,kV/cm but decisive at
 low field. Second, brine's conductivity ($\sim$4.6\,S/m) allows charge to
-transfer within the coalescence bridge, so that high-field merges of grown
-drops abort into daughter droplets~\cite{ristenpart2009,bird2009,
+transfer within the coalescence bridge, so that high-field merges of grown drops abort into daughter droplets, the
+field-driven analogue of classical partial coalescence
+\cite{charlesmason1960,blanchette2006,aryafar2006,ristenpart2009,bird2009,
 mousavichoubeh2011}; fresh water relaxes too slowly to bounce. The net
 prediction, brine slower by $\sim$20\% at 7.5\,kV/cm (110 vs 90\,min) with
 the penalty concentrated in the fines tail and growing toward lower fields,
@@ -450,7 +460,9 @@ sweep at fixed field. We note that a naive electrostatic expectation
 (saltier drops polarize more strongly) predicts the opposite sign and is
 contradicted by the observation: above a conductivity of order
 $10\,\sigma_{\mathrm{oil}}$, the dipole is geometry-limited and salinity
-adds nothing to the driving force.
+adds nothing to the driving force. Classical double-layer screening
+\cite{derjaguinlandau1941,verweyoverbeek1948,israelachvili2011} is likewise
+secondary here, since the draining film is oil rather than electrolyte.
 
 \section{Discussion}
 
@@ -502,7 +514,14 @@ $\rho_w=1017$\,kg/m$^3$, $n_w=1.338$, $\sigma_w=4.6$\,S/m; interfacial
 tension with Span~80, $\gamma=4$\,mN/m; oil conductivity
 $2\times10^{-8}$\,S/m; cell depth $H=3.37$\,cm; optical path $L=1$\,cm;
 $T=298$\,K. Initial condition: lognormal, median diameter 175\,nm,
-$\sigma_g=1.35$, $\phi=0.02$.
+$\sigma_g=1.35$, $\phi=0.02$. The field is delivered by unipolar corona
+space-charge injection across the air gap~\cite{sigmond1982,panat2025}.
+Drops are treated as spherical and non-deforming, valid since the operating
+field is well below the Taylor instability limit for these sizes
+\cite{taylor1964,allanmason1962,berg2010}. Shear-driven collision kernels
+\cite{saffmanturner1956} and hindered-settling corrections
+\cite{richardsonzaki1954} are neglected, consistent with a quiescent batch
+at $\phi=2\%$; both would matter in flow systems or at high water cut.
 
 \subsection{Pair kernels}
 Aligned-pair contact energy
@@ -518,7 +537,9 @@ a_i^3a_j^3/(\mu\,a_{\min})$ is the dipole-drift coefficient; the second
 bound enforces that a partner must drift in within the transit time
 \cite{pruppacher1997}. Coalescence probability per encounter:
 $\min\{1,\exp(A_{nc}\Lambda_{ij}-\Delta G/k_BT)\}$ with $A_{nc}=4$ central
-(2--8 band)~\cite{davis1964}. Partial coalescence: probability
+(2--8 band)~\cite{davis1964}; sub-unity coalescence efficiencies of this
+kind are standard in film-drainage-limited collision modeling
+\cite{chesters1991,ivanov1999,braziersmith1972,charlesmason1960}. Partial coalescence: probability
 $g_\sigma\,\mathrm{Bo}^2/(\mathrm{Bo}^2+\mathrm{Bo}_c^2)$ with electric Bond
 number $\mathrm{Bo}=\varepsilon_0\varepsilon_{\mathrm{oil}}(3E)^2
 a_{\min}/\gamma$ and charge-supply gate
@@ -541,7 +562,8 @@ Brownian regime and bottom-heavy in the sweep regime, so no single-rung
 approximation is valid.
 
 \subsection{Route 2: population balance}
-Sectional Smoluchowski equations on 123 geometric bins (25\,nm--300\,\textmu m),
+Sectional Smoluchowski equations~\cite{ramkrishna2000} on 123 geometric
+bins (25\,nm--300\,\textmu m),
 fixed-pivot deposition~\cite{kumar1996} for comparable-size merges; accretion
 (mass ratio $<10^{-2}$) treated as continuous growth via upwind advection in
 size space with number conservation; overflow beyond the top bin routed to
@@ -639,6 +661,85 @@ desalter using combined CFD-PBM method. \emph{Chem. Eng. Res. Des.}
 coalescence and capture kernels for the electrocoalescence process based on
 batch experiments. \emph{Ind. Eng. Chem. Res.} \textbf{59}, 1277--1297
 (2020).
+\bibitem{kokal2005} S.~Kokal, Crude-oil emulsions: a state-of-the-art
+review. \emph{SPE Prod. Facil.} \textbf{20}, 5--13 (2005).
+\bibitem{zolfaghari2016} R.~Zolfaghari, A.~Fakhru'l-Razi, L.~C. Abdullah,
+S.~S.~E.~H. Elnashaie, A.~Pendashteh, Demulsification techniques of
+water-in-oil and oil-in-water emulsions in petroleum industry.
+\emph{Sep. Purif. Technol.} \textbf{170}, 377--407 (2016).
+\bibitem{mason2006} T.~G. Mason, J.~N. Wilking, K.~Meleson, C.~B. Chang,
+S.~M. Graves, Nanoemulsions: formation, structure, and physical properties.
+\emph{J. Phys.: Condens. Matter} \textbf{18}, R635--R666 (2006).
+\bibitem{gupta2016} A.~Gupta, H.~B. Eral, T.~A. Hatton, P.~S. Doyle,
+Nanoemulsions: formation, properties and applications. \emph{Soft Matter}
+\textbf{12}, 2826--2841 (2016).
+\bibitem{mhatre2015} S.~Mhatre \emph{et al.}, Electrostatic phase
+separation: a review. \emph{Chem. Eng. Res. Des.} \textbf{96}, 177--195
+(2015).
+\bibitem{less2012} S.~Less, R.~Vilagines, The electrocoalescers'
+technology: advances, strengths and limitations for crude oil separation.
+\emph{J. Pet. Sci. Eng.} \textbf{81}, 57--63 (2012).
+\bibitem{winslow1949} W.~M. Winslow, Induced fibration of suspensions.
+\emph{J. Appl. Phys.} \textbf{20}, 1137--1140 (1949).
+\bibitem{parthasarathy1996} M.~Parthasarathy, D.~J. Klingenberg,
+Electrorheology: mechanisms and models. \emph{Mater. Sci. Eng. R}
+\textbf{17}, 57--103 (1996).
+\bibitem{lathamroxburgh1966} J.~Latham, I.~W. Roxburgh, Disintegration of
+pairs of water drops in an electric field. \emph{Proc. R. Soc. Lond. A}
+\textbf{295}, 84--97 (1966).
+\bibitem{taylor1964} G.~Taylor, Disintegration of water drops in an
+electric field. \emph{Proc. R. Soc. Lond. A} \textbf{280}, 383--397 (1964).
+\bibitem{allanmason1962} R.~S. Allan, S.~G. Mason, Particle behaviour in
+shear and electric fields I. Deformation and burst of fluid drops.
+\emph{Proc. R. Soc. Lond. A} \textbf{267}, 45--61 (1962).
+\bibitem{berg2010} G.~Berg, L.~E. Lundgaard, N.~Abi-Chebel, Electrically
+stressed water drops in oil. \emph{Chem. Eng. Process.} \textbf{49},
+1229--1240 (2010).
+\bibitem{charlesmason1960} G.~E. Charles, S.~G. Mason, The coalescence of
+liquid drops with flat liquid/liquid interfaces. \emph{J. Colloid Sci.}
+\textbf{15}, 236--267 (1960).
+\bibitem{blanchette2006} F.~Blanchette, T.~P. Bigioni, Partial coalescence
+of drops at liquid interfaces. \emph{Nat. Phys.} \textbf{2}, 254--257
+(2006).
+\bibitem{aryafar2006} H.~Aryafar, H.~P. Kavehpour, Drop coalescence through
+planar surfaces. \emph{Phys. Fluids} \textbf{18}, 072105 (2006).
+\bibitem{kilpatrick2012} P.~K. Kilpatrick, Water-in-crude oil emulsion
+stabilization: review and unanswered questions. \emph{Energy Fuels}
+\textbf{26}, 4017--4026 (2012).
+\bibitem{israelachvili2011} J.~N. Israelachvili, \emph{Intermolecular and
+Surface Forces}, 3rd ed. (Academic Press, Amsterdam, 2011).
+\bibitem{derjaguinlandau1941} B.~Derjaguin, L.~Landau, Theory of the
+stability of strongly charged lyophobic sols and of the adhesion of
+strongly charged particles in solutions of electrolytes. \emph{Acta
+Physicochim. URSS} \textbf{14}, 633--662 (1941).
+\bibitem{verweyoverbeek1948} E.~J.~W. Verwey, J.~Th.~G. Overbeek,
+\emph{Theory of the Stability of Lyophobic Colloids} (Elsevier, Amsterdam,
+1948).
+\bibitem{ivanov1999} I.~B. Ivanov, K.~D. Danov, P.~A. Kralchevsky,
+Flocculation and coalescence of micron-size emulsion droplets.
+\emph{Colloids Surf. A} \textbf{152}, 161--182 (1999).
+\bibitem{braziersmith1972} P.~R. Brazier-Smith, S.~G. Jennings, J.~Latham,
+The interaction of falling water drops: coalescence. \emph{Proc. R. Soc.
+Lond. A} \textbf{326}, 393--408 (1972).
+\bibitem{ramkrishna2000} D.~Ramkrishna, \emph{Population Balances: Theory
+and Applications to Particulate Systems in Engineering} (Academic Press,
+San Diego, 2000).
+\bibitem{saffmanturner1956} P.~G. Saffman, J.~S. Turner, On the collision
+of drops in turbulent clouds. \emph{J. Fluid Mech.} \textbf{1}, 16--30
+(1956).
+\bibitem{richardsonzaki1954} J.~F. Richardson, W.~N. Zaki, Sedimentation
+and fluidisation: Part I. \emph{Trans. Inst. Chem. Eng.} \textbf{32},
+35--53 (1954).
+\bibitem{sigmond1982} R.~S. Sigmond, Simple approximate treatment of
+unipolar space-charge-dominated coronas: the Warburg law and the saturation
+current. \emph{J. Appl. Phys.} \textbf{53}, 891--898 (1982).
+\bibitem{mengual1999} O.~Mengual, G.~Meunier, I.~Cayre, K.~Puech,
+P.~Snabre, TURBISCAN MA 2000: multiple light scattering measurement for
+concentrated emulsion and suspension instability analysis. \emph{Talanta}
+\textbf{50}, 445--456 (1999).
+\bibitem{reddy1981} S.~R. Reddy, H.~S. Fogler, Emulsion stability:
+determination from turbidity. \emph{J. Colloid Interface Sci.} \textbf{79},
+101--104 (1981).
 \bibitem{smoluchowski1917} M.~von Smoluchowski, Versuch einer mathematischen
 Theorie der Koagulationskinetik kolloider L\"osungen. \emph{Z. Phys. Chem.}
 \textbf{92}, 129--168 (1917).
@@ -680,7 +781,7 @@ and wrote the manuscript.
 
 \noindent\textbf{Data and code availability.} All code, inputs, digitized
 data, and figure-generation scripts, under version control with the frozen
-prediction state, are available at
+prediction state (commit \texttt{ab555b0}), are available at
 \url{https://github.com/sreedath/emulsion-clock}. An interactive companion
 is available at
 \url{https://demulsification-prediction.vercel.app}.
