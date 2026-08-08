@@ -172,6 +172,16 @@ def fig_map():
                        (175, 1.0, 0), (600, 2.4, 1)]:
         ax.plot([dd], [ee], "o", ms=5,
                 mfc=st.INK if ok else "white", mec=st.INK, mew=0.8, zorder=5)
+    from matplotlib.lines import Line2D
+    handles = [
+        Line2D([], [], marker="o", ls="none", ms=5, mfc=st.INK,
+               mec=st.INK, mew=0.8, label="cleared"),
+        Line2D([], [], marker="o", ls="none", ms=5, mfc="white",
+               mec=st.INK, mew=0.8, label="stayed milky"),
+        Line2D([], [], color=st.RED, lw=0.9, label="feasibility boundary"),
+    ]
+    ax.legend(handles=handles, loc="lower left", fontsize=7,
+              handlelength=1.4, borderpad=0.6)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlim(100, 1000)
@@ -180,6 +190,9 @@ def fig_map():
     ax.set_xticklabels([100, 200, 400, 800])
     ax.set_yticks([0.5, 1, 2, 4, 8])
     ax.set_yticklabels([0.5, 1, 2, 4, 8])
+    from matplotlib.ticker import NullFormatter
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set_xlabel(r"droplet diameter $2a$ (nm)")
     ax.set_ylabel(r"$E$ (kV/cm)")
     ax.text(430, 6.3, "clears", fontsize=9)

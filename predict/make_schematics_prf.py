@@ -281,9 +281,9 @@ def fig2():
         arrow(ax, (5.7, 6.7), (8.4, y + 1.0), color=st.INK, lw=0.6, ms=6)
         arrow(ax, (15.3, y + 1.0), (17.4, entry[i]), color=st.INK, lw=0.6,
               ms=6)
-    ax.text(11.85, 2.05, "three integration schemes, one shared and "
-            "independently verified kernel layer", fontsize=6.9,
-            ha="center", va="center", style="italic", color=st.GRAY)
+    ax.text(14.4, 2.05, "three integration schemes, one shared kernel layer",
+            fontsize=6.9, ha="center", va="center", style="italic",
+            color=st.GRAY)
 
     box(ax, 17.4, 4.7, 3.3, 3.2, [
         "optical clearing",
