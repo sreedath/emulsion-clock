@@ -216,9 +216,9 @@ def panel_cascade(ax):
 
 
 def fig1():
-    fig = plt.figure(figsize=(st.FULL_W, 5.9))
-    gs = fig.add_gridspec(2, 5, height_ratios=[1.45, 1.0], hspace=0.10,
-                          wspace=0.14)
+    fig = plt.figure(figsize=(st.FULL_W, 5.5))
+    gs = fig.add_gridspec(2, 5, height_ratios=[1.55, 1.0], hspace=0.02,
+                          wspace=0.10)
     ax_a = fig.add_subplot(gs[0, 0:2])
     ax_b = fig.add_subplot(gs[0, 2:5])
     ax_c = fig.add_subplot(gs[1, :])
@@ -247,56 +247,61 @@ def box(ax, x, y, w, h, lines, fontsize=7.3, ec=st.INK, lw=0.7,
 
 
 def fig2():
-    fig, ax = plt.subplots(figsize=(st.FULL_W, 2.9))
-    blank(ax, (0, 22), (0, 8))
+    fig, ax = plt.subplots(figsize=(st.FULL_W, 3.1))
+    blank(ax, (0, 23), (0, 10))
 
-    box(ax, 0.3, 2.4, 4.6, 5.2, [
+    # light panel grouping the three routes
+    ax.add_patch(mp.Rectangle((6.9, 0.7), 8.0, 9.0, fc="#f4f4f4",
+                              ec="none", zorder=0))
+    ax.text(10.9, 9.25, "three population-integration schemes,\n"
+            "one shared and verified kernel layer", fontsize=7.2,
+            ha="center", va="center", style="italic", color=st.GRAY)
+
+    box(ax, 0.4, 3.1, 4.7, 6.3, [
         "material properties",
-        "cell geometry ($H=3.4$ cm)",
-        r"device $I$–$V$ ($E\leq 7.5$ kV/cm)",
+        r"cell geometry ($H=3.4$ cm)",
+        r"device $I$--$V$ ($E\leq 7.5$ kV/cm)",
         r"DLS size ($2a=175$ nm)",
         r"water cut ($\phi=2\%$)",
-        "shelf life $\\rightarrow$ film barrier",
-        r"$\Delta G\approx20$–$30\,k_BT$",
-    ], title="setup facts only")
-    # quarantine box
-    ax.add_patch(mp.Rectangle((0.3, 0.3), 4.6, 1.5, fill=False, ec=st.RED,
-                              lw=0.8, hatch="///"))
-    ax.add_patch(mp.Rectangle((1.05, 0.55), 3.1, 1.0, fc="white",
-                              ec="none", zorder=5))
-    ax.text(2.6, 1.05, "measured kinetics:\nquarantined", fontsize=7.3,
-            ha="center", va="center", color=st.RED, zorder=6)
+        r"shelf life $\rightarrow$ barrier",
+        r"$\Delta G\approx20$--$30\,k_BT$",
+    ], title="setup inputs", tfs=8.2)
 
     routes = [
         ("route 1: analytic cascade",
-         ["ignition + growth ladder", "+ gravity endgame (closed form)"]),
+         ["ignition + growth ladder", "+ gravity endgame"]),
         ("route 2: population balance",
-         ["123 bins, Smoluchowski + settling", "Mie optics endpoint"]),
+         ["Smoluchowski, 123 bins,", "settling + Mie endpoint"]),
         ("route 3: learning agent",
-         ["super-droplet Monte Carlo rig", "value function = predicted time"]),
+         ["super-droplet Monte Carlo,", "value function = time"]),
     ]
     for i, (title, lines) in enumerate(routes):
-        y = 5.4 - 2.55 * i
-        box(ax, 6.9, y, 6.6, 2.15, lines, title=title, tfs=7.6)
-        arrow(ax, (4.9, 5.0 - 1.2 * i), (6.9, y + 1.05), color=st.INK,
-              lw=0.6, ms=6)
-        arrow(ax, (13.5, y + 1.05), (15.1, 4.15), color=st.INK, lw=0.6,
-              ms=6)
+        y = 6.6 - 2.75 * i
+        box(ax, 7.4, y, 7.0, 2.3, lines, title=title, tfs=7.8)
+        arrow(ax, (5.1, 6.25), (7.4, y + 1.15), color=st.INK, lw=0.6, ms=6)
+        arrow(ax, (14.4, y + 1.15), (16.1, 5.1), color=st.INK, lw=0.6, ms=6)
 
-    box(ax, 15.1, 2.9, 3.3, 2.5, [
+    box(ax, 16.1, 3.7, 3.2, 2.9, [
         "optical clearing",
-        r"$t_{95}$: 90–125 min",
+        r"$t_{95}=90$--$125$ min",
         "(range of central",
-        "estimates)"], title="prediction", tfs=7.6)
-    arrow(ax, (18.4, 4.15), (19.3, 4.15), color=st.INK, lw=0.7, ms=7)
-    box(ax, 19.3, 2.9, 2.4, 2.5, [
-        "measured", r"$\sim$60 min", "overpredicts", r"by 1.5–2$\times$"],
-        title="reveal", tfs=7.6)
-    # quarantine dashed line to reveal
-    ax.plot([2.6, 2.6, 20.5, 20.5], [1.8, 0.15, 0.15, 2.9], color=st.RED,
-            lw=0.6, ls=(0, (4, 3)))
-    ax.text(11.5, 0.55, "opened only after predictions are frozen",
-            fontsize=7, color=st.RED, ha="center")
+        "estimates)"], title="prediction", tfs=8.0)
+    arrow(ax, (19.3, 5.1), (20.1, 5.1), color=st.INK, lw=0.7, ms=7)
+    box(ax, 20.1, 3.7, 2.6, 2.9, [
+        r"$\sim$60 min", "measured;", "overpredicts", r"by 1.5--2$\times$"],
+        title="reveal", tfs=8.0)
+
+    # quarantined kinetics, opened only at the reveal
+    ax.add_patch(mp.Rectangle((0.4, 0.5), 4.7, 1.7, fill=False, ec=st.RED,
+                              lw=0.8, hatch="///"))
+    ax.add_patch(mp.Rectangle((0.9, 0.75), 3.7, 1.2, fc="white", ec="none",
+                              zorder=5))
+    ax.text(2.75, 1.35, "measured kinetics:\nquarantined", fontsize=7.3,
+            ha="center", va="center", color=st.RED, zorder=6)
+    ax.plot([5.1, 21.4, 21.4], [1.35, 1.35, 3.7], color=st.RED, lw=0.6,
+            ls=(0, (4, 3)))
+    ax.text(12.8, 1.7, "opened only after predictions are frozen",
+            fontsize=7.2, color=st.RED, ha="center")
     save(fig, "fig2_protocol.png")
 
 

@@ -67,14 +67,15 @@ def fig_cascade(brine):
     late = brine["snapshots"][5]
     blues = plt.cm.Blues(np.linspace(0.35, 0.95, len(grow)))
     labels = [r"$t=0$", r"$3\,$s", r"$8\,$s", r"$15\,$s", r"$30\,$s"]
-    for (t, n), c, lab in zip(grow, blues, labels):
+    for j, ((t, n), c, lab) in enumerate(zip(grow, blues, labels)):
         dv = n * model.masses * radii
         if dv.max() <= 0:
             continue
         dv = dv / dv.max()
         ax.plot(radii * 1e6, dv, color=c, lw=1.0)
         k = int(np.argmax(dv))
-        ax.annotate(lab, (radii[k] * 1e6, 1.03), color=st.INK, fontsize=8,
+        y_lab = 1.045 if j % 2 == 0 else 1.13
+        ax.annotate(lab, (radii[k] * 1e6, y_lab), color=st.INK, fontsize=8,
                     ha="center", annotation_clip=False)
     dv = late[1] * model.masses * radii
     if dv.max() > 0:
@@ -83,7 +84,7 @@ def fig_cascade(brine):
                     (0.4, 0.55), color=st.RED, fontsize=7.5)
     ax.set_xscale("log")
     ax.set_xlim(0.03, 400)
-    ax.set_ylim(0, 1.14)
+    ax.set_ylim(0, 1.20)
     ax.set_yticks([0, 0.5, 1.0])
     ax.set_xlabel(r"droplet radius $a$ ($\mu$m)")
     ax.set_ylabel(r"$dV/d\ln a$ (normalized)")

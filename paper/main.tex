@@ -11,6 +11,11 @@
 \captionsetup{font=small,labelfont=bf,skip=6pt}
 \setlength{\parskip}{0pt}
 \usepackage{titlesec}
+\setcounter{topnumber}{4}
+\setcounter{totalnumber}{6}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\textfraction}{0.03}
+\renewcommand{\floatpagefraction}{0.85}
 \titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
 \titlespacing{\section}{0pt}{10pt}{5pt}
@@ -122,7 +127,7 @@ reinforcement-learning agent), with the measured kinetics quarantined until
 all three numbers were frozen. We are explicit below about what this
 protocol does and does not establish.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig1_mechanism.png}
 \caption{\textbf{Setup and the multiscale chain from pair electrostatics
@@ -218,7 +223,7 @@ $E_{\mathrm{crit}}\!\propto\!a^{-3/2}$ (Fig.~\ref{fig:map}): the compact
 statement of why nanoemulsions defeat conventional electrocoalescers and
 why the high-field air-gap architecture succeeds.
 
-\begin{figure}[t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figs/fig_map.png}
 \caption{\textbf{The feasibility map.} The $\Lambda^{*}$ boundary
@@ -276,7 +281,7 @@ With reward equal to negative elapsed time, the learned value of the initial
 state \emph{is} the predicted clearing time. The agent independently
 rediscovers the experimental operating point, running at the arcing edge.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig2_protocol.png}
 \caption{\textbf{The blind-prediction protocol.} Setup facts (materials,
@@ -327,17 +332,26 @@ electrocoalescers~\cite{sharma2023}; the present contribution is to make
 the final stage quantitative through the scattering optics of the fines and
 to show it is the operational endpoint's rate-limiting step.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=0.94\textwidth]{figs/fig_cascade.png}\\[4pt]
-\includegraphics[width=0.94\textwidth]{figs/fig_transients.png}
-\caption{\textbf{Cascade and clocks (population balance, 7.5\,kV/cm).}
-Top: the volume-weighted size distribution marches through 25 doublings
-within minutes. Bottom left: the optical clock; droplet optical depth decays
-toward the 95\%-transmittance threshold (dashed) in 90--110\,min, brine
-(orange) slower than DI water (blue). Bottom right: the mass clock; resolved
-water exceeds 97\% within minutes for both phases.}
-\label{fig:dynamics}
+\includegraphics[width=0.9\textwidth]{figs/fig_cascade.png}
+\caption{\textbf{The coalescence cascade (population balance,
+7.5\,kV/cm, brine).} Volume-weighted size distributions march through
+$\sim$25 volume doublings within about thirty seconds (blue curves); by ten
+minutes (red dashed) the largest drops have settled out and the suspended
+remainder is the residual fog plus the last settling drops.}
+\label{fig:cascade}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/fig_transients.png}
+\caption{\textbf{Two clocks (population balance, 7.5\,kV/cm).}
+(a)~The optical clock: droplet optical depth decays toward the
+95\%-transmittance threshold (dashed) in 90--110\,min, brine (red) slower
+than DI water (blue). (b)~The mass clock: resolved water exceeds 97\%
+within minutes for both phases.}
+\label{fig:clocks}
 \end{figure*}
 
 \subsection{The data collapse onto one line}
@@ -421,7 +435,7 @@ predicted $t_{95}$ by $-27\%$/$+46\%$ (81, 110, and 161\,min at 94, 95,
 and 96\%), so part of any gap at this endpoint reflects the endpoint's own
 sensitivity rather than cascade physics.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.9\textwidth]{figs/fig_lambda.png}
 \caption{\textbf{Validation against published data.} Left: the seven
@@ -570,9 +584,10 @@ size space with number conservation; overflow beyond the top bin routed to
 the resolved pool. Explicit conservative time stepping with
 $\Delta t\le0.2/\max(\text{per-particle rate})$; the global mass audit
 closes at 0.99, and refining the grid from 123 to 246 bins shifts $t_{95}$
-by $+3.8\%$, so discretization error is small against the reported bands.
-Endpoint stiffness is reported in Results ($t_{95}=81$, 110, 161\,min at
-thresholds of 94, 95, 96\%).
+by $+3.8\%$, so discretization error is small against the reported bands
+(Fig.~\ref{fig:supp}c). Endpoint stiffness is reported in Results and
+Fig.~\ref{fig:supp}b; the barrier band and the onset-offset profile are
+shown in Figs.~\ref{fig:supp}a and \ref{fig:supp}d.
 Endpoint: $T_{\mathrm{rel}}=\exp[-L\sum_in_iC_{\mathrm{sca}}(a_i)]$ with
 Mie cross sections (relative index 0.933)~\cite{bohren1983}.
 
@@ -599,6 +614,26 @@ seven voltage-sweep points were digitized from Fig.~4C of
 Ref.~\cite{panat2025} (gap 5.5\,cm per its Methods; field read as $V/d$ per
 its Fig.~4B). All code, parameters, and figure-generation scripts:
 \url{https://github.com/sreedath/emulsion-clock}.
+
+\appendix
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0}
+\section*{Appendix: supplementary figures}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.88\textwidth]{figs/fig_supp.png}
+\caption{\textbf{Robustness of the headline numbers.} (a)~Sensitivity of
+the predicted optical clearing time to the film barrier over its
+20--30\,$k_BT$ band, both water phases. (b)~Stiffness of the operational
+endpoint: a one-percentage-point change in the transmittance threshold
+moves $t_{95}$ by $-27\%$/$+46\%$. (c)~Grid convergence of the population
+balance: doubling the size resolution shifts $t_{95}$ by $+3.8\%$.
+(d)~Onset-offset profile of the data collapse: the RMS spread of
+$t\cdot\Lambda$ across the digitized sweep degrades monotonically with an
+assumed corona offset $V_0$ in the field reading, preferring $V_0=0$.}
+\label{fig:supp}
+\end{figure*}
 
 \begin{thebibliography}{99}\small
 \bibitem{eow2001} J.~S. Eow, M.~Ghadiri, A.~O. Sharif, T.~J. Williams,
