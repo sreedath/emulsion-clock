@@ -161,7 +161,7 @@ induced dipoles~\cite{jones1995}, Brownian transport with
 dipolar-capture enhancement (a Fuchs-type factor
 $\sim\Lambda^{1/3}$)~\cite{fuchs1934,friedlander2000}, near-contact
 amplification of the conductor--conductor attraction over the point-dipole
-law~\cite{davis1964,zhang1995}, film-drainage barrier crossing, and, once
+law~\cite{davis1964,zhang1995}, film-drainage barrier crossing (step-by-step illustration in Fig.~\ref{fig:spair}), and, once
 drops grow past a micron, sweep coagulation: settling drops collect smaller
 partners from a capture tube whose radius is bounded jointly by energy
 ($U(r)\!=\!k_BT$) and by drift-versus-transit kinetics
@@ -240,7 +240,8 @@ and we recommend it for future systems.
 \emph{Route 1, analytic cascade.} Closed-form staging: a Brownian gate
 ($\Lambda=5.2$ at the 87.5\,nm median radius and 7.5\,kV/cm: open;
 $\Lambda=7.8$ at the 100\,nm mean radius used for the data collapse), barrier-limited ignition
-(seconds), a growth ladder summing $\sim$25 volume-doubling times with
+(seconds), a growth ladder summing $\sim$25 volume-doubling times
+(Fig.~\ref{fig:sladder}) with
 Brownian-capture and sweep transport, and a gravity endgame at the handoff
 radius minimizing total time. Being single-sized, this route can only time the \emph{mass} clock:
 5\,min (brine, barrier 20--25\,$k_BT$), rising to $\sim$40\,min at the
@@ -296,7 +297,8 @@ nonzero exit status on any failure.
 
 \subsection{Two clocks, one process}
 
-The framework's central structural prediction is that ``separated'' is two
+The framework's central structural prediction, illustrated schematically
+in Fig.~\ref{fig:sclear}, is that ``separated'' is two
 different claims (Figs.~\ref{fig:cascade} and \ref{fig:clocks}). The cascade is parallel: all
 pairs merge simultaneously, the population halves per generation, and only
 $\log_2(4\times10^{7})\!\approx\!25$ generations connect 175\,nm to settling
@@ -305,7 +307,8 @@ the water reaches the free layer within $\sim$2\,min at 7.5\,kV/cm (the
 analytic route's central estimate is 5\,min). The transmittance endpoint, the standard optical route to emulsion
 stability assessment~\cite{mengual1999,reddy1981}, is another matter. A residual fog holding under half a percent of the water,
 droplets too small for even the amplified contact energy to open the film
-barrier, scatters strongly enough to keep the sample milky, and it can no
+barrier, scatters strongly enough to keep the sample milky
+(Fig.~\ref{fig:soptics}), and it can no
 longer coalesce in parallel: each straggler waits alone for a rare
 collector. Logarithmic physics for the bulk; linear waiting for the tail.
 The two clocks differ by a factor of 20--50, which is precisely why clearing
@@ -606,6 +609,41 @@ its Fig.~4B). All code, parameters, and figure-generation scripts:
 \setcounter{figure}{0}
 \section*{Appendix: supplementary figures}
 
+Figures~\ref{fig:spair} and \ref{fig:sclear} illustrate, for the general
+reader, the two processes this paper connects: the merger of a single
+droplet pair, and the clearing of the emulsion as a whole.
+Figures~\ref{fig:supp}--\ref{fig:sladder} collect the quantitative
+robustness and mechanism material referenced from the main text.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_supp_pair.png}
+\caption{\textbf{Droplet--droplet electrocoalescence, step by step.}
+(a)~Without a field, surfactant monolayers and Brownian motion keep the
+droplets apart; the emulsion is stable for months. (b)~With the field on,
+each conducting drop becomes an induced dipole within nanoseconds.
+(c)~Aligned dipoles attract head-to-tail with bond energy
+$U\sim\Lambda k_BT$, which must beat thermal noise. (d)~The trapped oil
+film must drain past the surfactant barrier $\Delta G$; the inset energy
+landscape shows how the dipolar squeeze tilts the barrier (this is the
+rate-limiting step). (e)~The film ruptures in nanoseconds; volumes add and
+the merged drop rings down. Companion to Fig.~\ref{fig:mechanism}(b).}
+\label{fig:spair}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_supp_clearing.png}
+\caption{\textbf{How the whole emulsion clears.} Beaker timeline at the
+reference condition. Chains form within seconds; grown drops rain into the
+free-water layer within a minute; the bulk water is resolved in minutes
+(mass clock); yet the sample only reaches 95\% transmittance after the
+residual sub-100-nm fog is slowly consumed (optical clock). The two bars
+below show the two clocks on a logarithmic time axis. Companion to
+Fig.~\ref{fig:mechanism}(c).}
+\label{fig:sclear}
+\end{figure*}
+
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.88\textwidth]{figs/fig_supp.png}
@@ -634,6 +672,31 @@ text. The analytic route (open symbol, below the rule) times the mass
 clock, a different observable, and is shown for completeness.}
 \label{fig:forest}
 \end{figure}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_supp_optics.png}
+\caption{\textbf{Why optical clearing is the hard observable.}
+(a)~Mie scattering per unit water volume versus droplet radius: the
+initial nanoemulsion sits near the scattering peak, while the same water
+in coarse drops scatters a thousandfold less; a residual fog therefore
+dominates the appearance. (b)~Optical-depth density by size from the
+population balance: by ten minutes essentially all remaining opacity
+lives in the sub-100-nm fog.}
+\label{fig:soptics}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/fig_supp_ladder.png}
+\caption{\textbf{Anatomy of the cascade clock.} Per-doubling time versus
+droplet radius for the two transport channels and their sum (brine,
+7.5\,kV/cm, central barrier), together with the settling time over half
+the cell depth. Brownian capture controls growth below a micron and
+gravitational sweep above it; the cascade's cost concentrates in the
+micron-scale bottleneck, and gravity takes over at the handoff radius.}
+\label{fig:sladder}
+\end{figure*}
 
 \begin{thebibliography}{99}\small
 \bibitem{eow2001} J.~S. Eow, M.~Ghadiri, A.~O. Sharif, T.~J. Williams,
