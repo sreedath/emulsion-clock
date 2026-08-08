@@ -30,7 +30,7 @@ extracted from the emulsion's zero-field shelf life. Three independent
 computational routes, a closed-form staged cascade, a polydisperse population
 balance with a Mie-scattering endpoint, and a stochastic super-droplet
 simulation steered by a reinforcement-learning agent, predict, without
-calibration to any kinetic measurement, clearing in 90--125 minutes for a
+calibration to any kinetic measurement, clearing in 90 to 125 minutes for a
 175\,nm, 2\% emulsion at 7.5\,kV/cm; the measured value, not consulted
 during model construction, is $\sim$60 minutes. The framework identifies two
 well-separated clocks: bulk water separation (minutes) and optical clearing
@@ -59,7 +59,7 @@ remedy~\cite{atten1993,eow2001,mhatre2015,less2012}, but
 conventional immersed-electrode devices are capped near 1\,kV/cm by
 shorting through droplet chains. A recently demonstrated non-Laplacian,
 air-gap corona architecture removes that cap and sustains fields up to
-$\sim$7.5\,kV/cm across the emulsion, demulsifying 150--800\,nm water-in-oil
+$\sim$7.5\,kV/cm across the emulsion, demulsifying 150 to 800\,nm water-in-oil
 emulsions without chemical additives~\cite{panat2025}.
 
 The microphysics underlying such devices is well established. A conducting
@@ -85,7 +85,7 @@ and correlated with voltage, but not predicted from first principles.
 
 This paper constructs and tests that bridge. Our contributions are fourfold.
 First, a multiscale framework that converts setup information alone,
-material properties, geometry, device current--voltage characterization, the
+material properties, geometry, device current-voltage characterization, the
 initial size distribution, and a film-barrier bound extracted from the
 emulsion's zero-field shelf life, into a prediction of the \emph{optical}
 clearing time with zero calibrated parameters; unlike prior
@@ -95,7 +95,7 @@ exactly as measured, and the regime is the Brownian-dominated nanoemulsion
 limit. Second, a strict separation of two
 observables that are usually conflated: the \emph{mass clock} (bulk water
 resolved into a free layer, minutes at high field) and the \emph{optical
-clock} (95\% relative transmittance, slower by a factor 20--50), the latter
+clock} (95\% relative transmittance, slower by a factor 20 to 50), the latter
 controlled by a fines tail that no single-size argument can represent.
 Third, a dimensionless organizing group: the electrocoalescence number
 $\Lambda$, the induced-dipole pair energy at contact in units of $k_BT$.
@@ -122,7 +122,7 @@ $H$ above a grounded plate, sustaining fields up to
 $E\approx7.5$\,kV/cm in the oil without shorting. (b)~Pair-scale
 electrocoalescence: droplets polarize into induced dipoles, attract and
 chain along the field, drain the intervening oil film against the
-surfactant barrier $\Delta G\approx20$--$30\,k_BT$ (the rate-limiting
+surfactant barrier $\Delta G\approx20$ to $30\,k_BT$ (the rate-limiting
 step), and merge. (c)~Population scale: a parallel cascade of $\sim$25
 volume doublings, with gravitational sweep dominating above a micron,
 delivers drops to Stokes settling; two clocks result, with bulk separation
@@ -153,14 +153,14 @@ $\Delta G \gtrsim k_BT\ln(K_Bn_0t_s)\approx 19\,k_BT$ (instantiating
 ``several months'' as three; the criterion, fewer than one coalescence per
 drop, is stricter than ``no visible separation'' and thus a conservative
 lower bound). We carry
-$\Delta G=20$--$30\,k_BT$ as the honest uncertainty band; Span-type
+$\Delta G=20$ to $30\,k_BT$ as the honest uncertainty band; Span-type
 monolayers stiffened by electrolytes sit in this range~\cite{opawale1998}.
 
 The pair physics is assembled from established elements: conductor-limit
 induced dipoles~\cite{jones1995}, Brownian transport with
 dipolar-capture enhancement (a Fuchs-type factor
 $\sim\Lambda^{1/3}$)~\cite{fuchs1934,friedlander2000}, near-contact
-amplification of the conductor--conductor attraction over the point-dipole
+amplification of the conductor-conductor attraction over the point-dipole
 law~\cite{davis1964,zhang1995}, film-drainage barrier crossing (step-by-step illustration in Fig.~\ref{fig:spair}), and, once
 drops grow past a micron, sweep coagulation: settling drops collect smaller
 partners from a capture tube whose radius is bounded jointly by energy
@@ -182,23 +182,23 @@ the electrocoalescence number,
 \label{eq:lambda}
 \end{equation}
 with $E$ the field in the oil, $a$ the droplet radius, and $K\!\to\!1$ the
-Clausius--Mossotti factor in the conductor limit. $\Lambda$ is the droplet
+Clausius-Mossotti factor in the conductor limit. $\Lambda$ is the droplet
 analogue of the dipolar coupling constant governing chain formation in
 electrorheological fluids~\cite{halsey1990}. Coalescence, however, must also
 defeat the film barrier. Two amplifications act at contact: a large drop
 presses a small one with $\sim$8$\times$ the equal-pair energy (the
 ``scavenging rule'', Methods), and the near-contact conductor interaction
-exceeds the point-dipole law by a factor $A_{nc}\!\approx\!2$--8
+exceeds the point-dipole law by a factor $A_{nc}\!\approx\!2$ to 8
 \cite{davis1964}. The go/no-go threshold is therefore
 \begin{equation}
 \Lambda^{*}\;\approx\;\frac{\Delta G/k_BT}{8\,A_{nc}}\;\approx\;0.8
-\qquad(\text{band }0.3\text{--}2),
+\qquad(\text{band }0.3\text{ to }2),
 \label{eq:lambdastar}
 \end{equation}
 predicted before any kinetic data are consulted. The two amplifications
 are not strictly independent (both are near-contact corrections to the
 point-dipole law), so their product should be read as a heuristic
-16--64$\times$ band whose uncertainty the threshold inherits; ignition at
+16 to 64$\times$ band whose uncertainty the threshold inherits; ignition at
 $\Lambda\sim\Lambda^{*}$ additionally relies on the large-size tail of
 the initial distribution, since an equal median pair at threshold still
 faces a substantial residual barrier. Since
@@ -211,7 +211,7 @@ why the high-field air-gap architecture succeeds.
 \centering
 \includegraphics[width=\columnwidth]{figs/fig_map.png}
 \caption{\textbf{The feasibility map.} The $\Lambda^{*}$ boundary
-($E\!\sim\!a^{-3/2}$; orange band spans $\Lambda^{*}=0.3$--2) in
+($E\!\sim\!a^{-3/2}$; orange band spans $\Lambda^{*}=0.3$ to 2) in
 field-versus-size space, with operating points from
 Ref.~\cite{panat2025}: filled, cleared; open, remained milky. The sweep's
 cleared points bracket the boundary band, placing the operational
@@ -244,7 +244,7 @@ $\Lambda=7.8$ at the 100\,nm mean radius used for the data collapse), barrier-li
 (Fig.~\ref{fig:sladder}) with
 Brownian-capture and sweep transport, and a gravity endgame at the handoff
 radius minimizing total time. Being single-sized, this route can only time the \emph{mass} clock:
-5\,min (brine, barrier 20--25\,$k_BT$), rising to $\sim$40\,min at the
+5\,min (brine, barrier 20 to 25\,$k_BT$), rising to $\sim$40\,min at the
 30\,$k_BT$ barrier edge.
 
 \emph{Route 2, population balance.} A 123-bin sectional
@@ -282,9 +282,9 @@ frozen; the quantitative comparison is shown in Fig.~\ref{fig:forest}.}
 The three routes agree with one another within 21\% (range over mean of
 the central estimates) on the optical clock: population balance 110\,min
 for brine and 90\,min for DI water (film-barrier band widens the brine
-value to 78\,min--3.3\,h), fixed-field super-droplet Monte Carlo 102\,min (median over 20 random
-seeds, observed range 81--273\,min), and learned value
-estimate 125\,min. Throughout, the quoted prediction band 90--125\,min is
+value to 78\,min to 3.3\,h), fixed-field super-droplet Monte Carlo 102\,min (median over 20 random
+seeds, observed range 81 to 273\,min), and learned value
+estimate 125\,min. Throughout, the quoted prediction band 90 to 125\,min is
 the range of central estimates across routes and water phases; it excludes
 the film-barrier systematic, which is reported separately. Cross-route disagreements during development were diagnostic
 rather than cosmetic: they exposed a mass leak at the size-grid boundary, an
@@ -311,7 +311,7 @@ barrier, scatters strongly enough to keep the sample milky
 (Fig.~\ref{fig:soptics}), and it can no
 longer coalesce in parallel: each straggler waits alone for a rare
 collector. Logarithmic physics for the bulk; linear waiting for the tail.
-The two clocks differ by a factor of 20--50, which is precisely why clearing
+The two clocks differ by a factor of 20 to 50, which is precisely why clearing
 times have resisted single-droplet reasoning: the eye's endpoint is a
 statement about the smallest decile of the initial size distribution, not
 about the bulk. Staged kinetics with a slow residual-emulsion tail have been
@@ -336,7 +336,7 @@ suspended remainder is the residual fog plus the last settling drops.}
 \includegraphics[width=0.9\textwidth]{figs/fig_transients.png}
 \caption{\textbf{Two clocks (population balance, 7.5\,kV/cm).}
 (a)~The optical clock: droplet optical depth decays toward the
-95\%-transmittance threshold (dashed) in 90--110\,min, brine (red) slower
+95\%-transmittance threshold (dashed) in 90 to 110\,min, brine (red) slower
 than DI water (blue). (b)~The mass clock: resolved water exceeds 97\%
 within minutes for both phases.}
 \label{fig:clocks}
@@ -355,7 +355,7 @@ enables. Digitizing the seven published points and converting voltage to $\Lambd
 caption; electrode gap $d=5.5$\,cm per its Methods) yields
 \begin{equation}
 t_{95}\cdot\Lambda \;=\; 23.5\ \text{min}
-\quad(\text{RMS scatter } 5\%,\ \text{range } 21.5\text{--}25.5)
+\quad(\text{RMS scatter } 5\%,\ \text{range } 21.5\text{ to }25.5)
 \label{eq:collapse}
 \end{equation}
 across the sweep (Fig.~\ref{fig:collapse}). Equivalently, the digitized
@@ -375,7 +375,7 @@ and three of the seven cleared points lie below the central
 $\Lambda^{*}=0.8$: the data are consistent with the a-priori threshold
 \emph{band} of Eq.~\ref{eq:lambdastar} only at its lower edge, indicating
 that the central near-contact amplification is too conservative and the
-true amplification is nearer the top of its 2--8 range. Below corona onset,
+true amplification is nearer the top of its 2 to 8 range. Below corona onset,
 where the field in the oil is negligible and $\Lambda$ is effectively
 zero, no clearing was observed in 110\,min, consistent with the gate. (ii)~The collapse arbitrates a genuine ambiguity in the device physics.
 Writing the field as $(V-V_0)/d$ and profiling the collapse quality over
@@ -383,7 +383,7 @@ the onset offset $V_0$ gives RMS spreads of 5.2, 8.9, 15.6, 33, and 58\%
 at $V_0=0$, 1, 2, 4, and 6.3\,kV: the data prefer $V_0=0$ and exclude
 offsets beyond $\sim$1\,kV at the level of the observed scatter,
 consistent with $V/d$ approximating the average field in the oil, as the
-device's current--voltage characterization also indicates (the offset test
+device's current-voltage characterization also indicates (the offset test
 varies $V_0$ only; it does not by itself pin the gap).
 (The corona \emph{onset} of the source device remains physically real;
 what the data reject is a large standing offset in the oil-field reading
@@ -397,7 +397,7 @@ the sweep: at the sweep's low-field points our barrier-gated model predicts
 clearing times that are orders of magnitude too long (the exponential gate
 $e^{A_{nc}\Lambda-\Delta G/k_BT}$ effectively closes below
 $\sim$3\,kV/cm at this droplet size), whereas the experiments cleared in
-11--95\,min. The model's absolute kinetics are supported only near the
+11 to 95\,min. The model's absolute kinetics are supported only near the
 high-field reference condition; the sweep data falsify the central barrier
 calibration at low fields, again pointing to stronger near-contact
 amplification or to field-driven transport (electrohydrodynamic
@@ -412,7 +412,7 @@ dimensionless analysis exposes.
 
 On the absolute number the model \emph{overpredicts}
 (Fig.~\ref{fig:forest}): the central band of
-90--125\,min lies a factor 1.5--2.1 above the single measured value of
+90 to 125\,min lies a factor 1.5 to 2.1 above the single measured value of
 $\sim$60\,min, with no stated experimental uncertainty or replicates to
 compare against, so the comparison establishes order-of-magnitude
 correctness with a systematic slow bias, not quantitative validation. Two
@@ -540,7 +540,7 @@ a_i^3a_j^3/(\mu\,a_{\min})$ is the dipole-drift coefficient; the second
 bound enforces that a partner must drift in within the transit time
 \cite{pruppacher1997}. Coalescence probability per encounter:
 $\min\{1,\exp(A_{nc}\Lambda_{ij}-\Delta G/k_BT)\}$ with $A_{nc}=4$ central
-(2--8 band)~\cite{davis1964}; sub-unity coalescence efficiencies of this
+(2 to 8 band)~\cite{davis1964}; sub-unity coalescence efficiencies of this
 kind are standard in film-drainage-limited collision modeling
 \cite{chesters1991,ivanov1999,braziersmith1972,charlesmason1960}. Partial coalescence: probability
 $g_\sigma\,\mathrm{Bo}^2/(\mathrm{Bo}^2+\mathrm{Bo}_c^2)$ with electric Bond
@@ -566,7 +566,7 @@ approximation is valid.
 
 \subsection{Route 2: population balance}
 Sectional Smoluchowski equations~\cite{ramkrishna2000} on 123 geometric
-bins (25\,nm--300\,\textmu m),
+bins (25\,nm to 300\,\textmu m),
 fixed-pivot deposition~\cite{kumar1996} for comparable-size merges; accretion
 (mass ratio $<10^{-2}$) treated as continuous growth via upwind advection in
 size space with number conservation; overflow beyond the top bin routed to
@@ -612,13 +612,13 @@ its Fig.~4B). All code, parameters, and figure-generation scripts:
 Figures~\ref{fig:spair} and \ref{fig:sclear} illustrate, for the general
 reader, the two processes this paper connects: the merger of a single
 droplet pair, and the clearing of the emulsion as a whole.
-Figures~\ref{fig:supp}--\ref{fig:sladder} collect the quantitative
+Figures~\ref{fig:supp} to \ref{fig:sladder} collect the quantitative
 robustness and mechanism material referenced from the main text.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig_supp_pair.png}
-\caption{\textbf{Droplet--droplet electrocoalescence, step by step.}
+\caption{\textbf{Droplet-droplet electrocoalescence, step by step.}
 (a)~Without a field, surfactant monolayers and Brownian motion keep the
 droplets apart; the emulsion is stable for months. (b)~With the field on,
 each conducting drop becomes an induced dipole within nanoseconds.
@@ -649,7 +649,7 @@ Fig.~\ref{fig:mechanism}(c).}
 \includegraphics[width=0.88\textwidth]{figs/fig_supp.png}
 \caption{\textbf{Robustness of the headline numbers.} (a)~Sensitivity of
 the predicted optical clearing time to the film barrier over its
-20--30\,$k_BT$ band, both water phases. (b)~Stiffness of the operational
+20 to 30\,$k_BT$ band, both water phases. (b)~Stiffness of the operational
 endpoint: a one-percentage-point change in the transmittance threshold
 moves $t_{95}$ by $-27\%$/$+46\%$. (c)~Grid convergence of the population
 balance: doubling the size resolution shifts $t_{95}$ by $+3.8\%$.
