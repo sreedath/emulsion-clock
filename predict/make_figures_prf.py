@@ -26,7 +26,7 @@ def save(fig, name):
 
 
 def run_models():
-    snaps = [0.0, 3.0, 8.0, 15.0, 30.0, 600.0]
+    snaps = [0.5 * k for k in range(29)] + [600.0]
     brine = PBEModel(E_PRIMARY, BRINE_05M, DG).run(
         log_every=30.0, snapshot_times=snaps)
     di = PBEModel(E_PRIMARY, DI_WATER, DG).run(log_every=30.0)
@@ -63,10 +63,27 @@ def fig_cascade(brine):
     fig, ax = plt.subplots(figsize=(st.FULL_W, 2.7))
     model = PBEModel(E_PRIMARY, BRINE_05M, DG)
     radii = model.radii
-    grow = brine["snapshots"][:5]
-    late = brine["snapshots"][5]
+    # pick snapshots whose peaks are evenly spaced in log radius
+    all_snaps = brine["snapshots"][:-1]
+    late = brine["snapshots"][-1]
+    targets = [0.09e-6, 0.7e-6, 4e-6, 30e-6, 180e-6]
+    grow = []
+    for tgt in targets:
+        best, err = None, 1e9
+        for (t, n) in all_snaps:
+            dv = n * model.masses * radii
+            if dv.max() <= 0:
+                continue
+            pk = radii[int(np.argmax(dv))]
+            e = abs(np.log(pk / tgt))
+            if e < err:
+                best, err = (t, n), e
+        if best is not None and all(best[0] != g[0] for g in grow):
+            grow.append(best)
     blues = plt.cm.Blues(np.linspace(0.35, 0.95, len(grow)))
-    labels = [r"$t=0$", r"$3\,$s", r"$8\,$s", r"$15\,$s", r"$30\,$s"]
+    labels = [(r"$t=0$" if t == 0 else
+               (f"${t:.0f}\,$s" if t == int(t) else f"${t:.1f}\,$s"))
+              for (t, n) in grow]
     for j, ((t, n), c, lab) in enumerate(zip(grow, blues, labels)):
         dv = n * model.masses * radii
         if dv.max() <= 0:

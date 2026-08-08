@@ -232,40 +232,39 @@ def fig1():
 
 
 # ------------------------------------------------------------------- fig 2
-def box(ax, x, y, w, h, lines, fontsize=7.3, ec=st.INK, lw=0.7,
+def box(ax, x, y, w, h, lines, fontsize=7.2, ec=st.INK, lw=0.7,
         title=None, tfs=8):
-    ax.add_patch(mp.Rectangle((x, y), w, h, fill=False, ec=ec, lw=lw))
-    ty = y + h - 0.32
+    ax.add_patch(mp.Rectangle((x, y), w, h, fc="white", ec=ec, lw=lw,
+                              zorder=3))
+    lh = 0.52
+    block = (0.62 if title else 0) + lh * len(lines)
+    ty = y + h / 2 + block / 2
     if title:
+        ty -= 0.31
         ax.text(x + w / 2, ty, title, fontsize=tfs, ha="center",
-                va="center", weight="bold")
-        ty -= 0.42
+                va="center", weight="bold", zorder=4)
+        ty -= 0.62
+    else:
+        ty -= lh / 2
     for ln in lines:
         ax.text(x + w / 2, ty, ln, fontsize=fontsize, ha="center",
-                va="center")
-        ty -= 0.36
+                va="center", zorder=4)
+        ty -= lh
 
 
 def fig2():
-    fig, ax = plt.subplots(figsize=(st.FULL_W, 3.1))
-    blank(ax, (0, 23), (0, 10))
+    fig, ax = plt.subplots(figsize=(st.FULL_W, 3.0))
+    blank(ax, (0, 24.5), (0, 10.5))
 
-    # light panel grouping the three routes
-    ax.add_patch(mp.Rectangle((6.9, 0.7), 8.0, 9.0, fc="#f4f4f4",
-                              ec="none", zorder=0))
-    ax.text(10.9, 9.25, "three population-integration schemes,\n"
-            "one shared and verified kernel layer", fontsize=7.2,
-            ha="center", va="center", style="italic", color=st.GRAY)
-
-    box(ax, 0.4, 3.1, 4.7, 6.3, [
+    box(ax, 0.3, 3.4, 5.4, 6.6, [
         "material properties",
-        r"cell geometry ($H=3.4$ cm)",
-        r"device $I$--$V$ ($E\leq 7.5$ kV/cm)",
-        r"DLS size ($2a=175$ nm)",
+        "cell geometry ($H=3.4$ cm)",
+        r"device $I$–$V$ ($E\leq 7.5$ kV/cm)",
+        "DLS size ($2a=175$ nm)",
         r"water cut ($\phi=2\%$)",
         r"shelf life $\rightarrow$ barrier",
-        r"$\Delta G\approx20$--$30\,k_BT$",
-    ], title="setup inputs", tfs=8.2)
+        r"$\Delta G\approx20$–$30\,k_BT$",
+    ], title="setup inputs", tfs=8.2, fontsize=7.0)
 
     routes = [
         ("route 1: analytic cascade",
@@ -275,33 +274,37 @@ def fig2():
         ("route 3: learning agent",
          ["super-droplet Monte Carlo,", "value function = time"]),
     ]
+    entry = [7.15, 6.35, 5.55]
     for i, (title, lines) in enumerate(routes):
-        y = 6.6 - 2.75 * i
-        box(ax, 7.4, y, 7.0, 2.3, lines, title=title, tfs=7.8)
-        arrow(ax, (5.1, 6.25), (7.4, y + 1.15), color=st.INK, lw=0.6, ms=6)
-        arrow(ax, (14.4, y + 1.15), (16.1, 5.1), color=st.INK, lw=0.6, ms=6)
+        y = 7.9 - 2.75 * i
+        box(ax, 8.4, y, 6.9, 2.05, lines, title=title, tfs=7.8)
+        arrow(ax, (5.7, 6.7), (8.4, y + 1.0), color=st.INK, lw=0.6, ms=6)
+        arrow(ax, (15.3, y + 1.0), (17.4, entry[i]), color=st.INK, lw=0.6,
+              ms=6)
+    ax.text(11.85, 2.05, "three integration schemes, one shared and "
+            "independently verified kernel layer", fontsize=6.9,
+            ha="center", va="center", style="italic", color=st.GRAY)
 
-    box(ax, 16.1, 3.7, 3.2, 2.9, [
+    box(ax, 17.4, 4.7, 3.3, 3.2, [
         "optical clearing",
-        r"$t_{95}=90$--$125$ min",
+        r"$t_{95}=90$–$125$ min",
         "(range of central",
         "estimates)"], title="prediction", tfs=8.0)
-    arrow(ax, (19.3, 5.1), (20.1, 5.1), color=st.INK, lw=0.7, ms=7)
-    box(ax, 20.1, 3.7, 2.6, 2.9, [
-        r"$\sim$60 min", "measured;", "overpredicts", r"by 1.5--2$\times$"],
-        title="reveal", tfs=8.0)
+    arrow(ax, (20.7, 6.3), (21.4, 6.3), color=st.INK, lw=0.7, ms=7)
+    box(ax, 21.4, 4.7, 2.7, 3.2, [
+        r"$\sim$60 min", "measured;", "overpredicts",
+        r"by 1.5–2$\times$"], title="reveal", tfs=8.0)
 
-    # quarantined kinetics, opened only at the reveal
-    ax.add_patch(mp.Rectangle((0.4, 0.5), 4.7, 1.7, fill=False, ec=st.RED,
+    ax.add_patch(mp.Rectangle((0.5, 0.6), 5.0, 1.8, fill=False, ec=st.RED,
                               lw=0.8, hatch="///"))
-    ax.add_patch(mp.Rectangle((0.9, 0.75), 3.7, 1.2, fc="white", ec="none",
+    ax.add_patch(mp.Rectangle((1.0, 0.85), 4.0, 1.3, fc="white", ec="none",
                               zorder=5))
-    ax.text(2.75, 1.35, "measured kinetics:\nquarantined", fontsize=7.3,
+    ax.text(3.0, 1.5, "measured kinetics:\nquarantined", fontsize=7.3,
             ha="center", va="center", color=st.RED, zorder=6)
-    ax.plot([5.1, 21.4, 21.4], [1.35, 1.35, 3.7], color=st.RED, lw=0.6,
-            ls=(0, (4, 3)))
-    ax.text(12.8, 1.7, "opened only after predictions are frozen",
-            fontsize=7.2, color=st.RED, ha="center")
+    ax.plot([5.7, 22.75, 22.75], [1.15, 1.15, 4.7], color=st.RED, lw=0.6,
+            ls=(0, (4, 3)), zorder=2)
+    ax.text(14.1, 0.62, "opened only after predictions are frozen",
+            fontsize=6.9, color=st.RED, ha="center")
     save(fig, "fig2_protocol.png")
 
 
