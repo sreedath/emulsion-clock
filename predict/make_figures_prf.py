@@ -190,6 +190,51 @@ def fig_map():
     save(fig, "fig_map.png")
 
 
+
+
+def fig_predictions():
+    """Forest plot: calibration-free predictions vs the measured value.
+    Replaces the protocol flowchart with a physics-style comparison."""
+    fig, ax = plt.subplots(figsize=(st.COL_W, 2.7))
+    rows = [
+        ("population balance, brine", 110, (78, 198), st.RED, "o", False),
+        ("population balance, DI",     90, (77, 119), st.BLUE, "s", False),
+        ("super-droplet MC, brine",   102, (81, 273), st.RED, "^", False),
+        ("learning agent, brine",     125, None,      st.RED, "D", False),
+        ("analytic (mass clock)",       5, (5, 40),   st.GRAY, "o", True),
+    ]
+    ys = [5, 4, 3, 2, 0.8]
+    ax.axvspan(90, 125, color=st.FILL_GRAY, lw=0, zorder=0)
+    ax.axvline(60, color=st.GREEN, lw=1.0, ls="--", zorder=2)
+    ax.text(55, 5.85, "measured\n$\\sim$60 min", fontsize=7.5,
+            color=st.GREEN, ha="right", va="center")
+    ax.text(106, 0.55, "central band\n90–125 min", fontsize=7.2,
+            ha="center", va="center", color=st.INK)
+    for (label, x, band, color, marker, openface), y in zip(rows, ys):
+        if band:
+            ax.plot(band, [y, y], color=color, lw=1.0,
+                    solid_capstyle="butt", zorder=3)
+            for b in band:
+                ax.plot([b, b], [y - 0.09, y + 0.09], color=color, lw=1.0,
+                        zorder=3)
+        ax.plot([x], [y], marker=marker, ms=5.5,
+                mfc="white" if openface else color, mec=color, mew=1.0,
+                zorder=4)
+    ax.axhline(1.45, color=st.GRAY, lw=0.5, ls=":")
+    ax.text(44, 1.18, "different endpoint", fontsize=6.6, color=st.GRAY,
+            ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=7.8)
+    ax.set_ylim(0.2, 6.2)
+    ax.set_xscale("log")
+    ax.set_xlim(2.5, 400)
+    ax.set_xticks([3, 10, 30, 60, 100, 300])
+    ax.set_xticklabels([3, 10, 30, 60, 100, 300])
+    ax.set_xlabel(r"time to clear (min)")
+    fig.tight_layout()
+    save(fig, "fig3_predictions.png")
+
+
 if __name__ == "__main__":
     st.apply()
     brine, di = run_models()
@@ -197,3 +242,4 @@ if __name__ == "__main__":
     fig_cascade(brine)
     fig_lambda()
     fig_map()
+    fig_predictions()

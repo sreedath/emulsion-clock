@@ -281,17 +281,20 @@ With reward equal to negative elapsed time, the learned value of the initial
 state \emph{is} the predicted clearing time. The agent independently
 rediscovers the experimental operating point, running at the arcing edge.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figs/fig2_protocol.png}
-\caption{\textbf{The blind-prediction protocol.} Setup facts (materials,
-geometry, device characterization, size distribution, and a film-barrier
-bound from zero-field shelf life) feed three independent routes: a
-closed-form cascade, a population balance with Mie optics, and a
-super-droplet Monte Carlo rig driven by a reinforcement-learning agent.
-Measured kinetics remain quarantined until all three predictions are frozen.}
+\includegraphics[width=\columnwidth]{figs/fig3_predictions.png}
+\caption{\textbf{Calibration-free predictions against the measured
+clearing time.} Central estimates (symbols) and uncertainty ranges (bars)
+for the optical endpoint from the population balance (film-barrier band),
+the fixed-field super-droplet Monte Carlo (spread over 20 seeds), and the
+learning agent's value estimate, alongside the single measured batch value
+(dashed). The grey band is the range of central estimates quoted in the
+text. The analytic route (open symbol, below the rule) times the mass
+clock, a different observable, and is shown for completeness. All model
+choices were frozen before the measured value was consulted.}
 \label{fig:protocol}
-\end{figure*}
+\end{figure}
 
 The three routes agree with one another within 21\% (range over mean of
 the central estimates) on the optical clock: population balance 110\,min
@@ -312,7 +315,7 @@ nonzero exit status on any failure.
 \subsection{Two clocks, one process}
 
 The framework's central structural prediction is that ``separated'' is two
-different claims (Fig.~\ref{fig:dynamics}). The cascade is parallel: all
+different claims (Figs.~\ref{fig:cascade} and \ref{fig:clocks}). The cascade is parallel: all
 pairs merge simultaneously, the population halves per generation, and only
 $\log_2(4\times10^{7})\!\approx\!25$ generations connect 175\,nm to settling
 sizes. Consequently bulk separation is fast: in the population balance, 97\% of
