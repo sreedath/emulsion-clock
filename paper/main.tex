@@ -1,38 +1,22 @@
-\documentclass[10pt,twocolumn]{article}
-\usepackage[margin=1.9cm,top=2.2cm]{geometry}
+\documentclass[aps,prfluids,reprint,amsmath,amssymb,superscriptaddress,longbibliography]{revtex4-2}
 \usepackage{graphicx}
-\usepackage{amsmath,amssymb}
-\usepackage{microtype}
-\usepackage{lmodern}
 \usepackage{xcolor}
 \usepackage{booktabs}
-\usepackage{caption}
 \usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
-\captionsetup{font=small,labelfont=bf,skip=6pt}
-\setlength{\parskip}{0pt}
-\usepackage{titlesec}
-\setcounter{topnumber}{4}
-\setcounter{totalnumber}{6}
-\renewcommand{\topfraction}{0.95}
-\renewcommand{\textfraction}{0.03}
-\renewcommand{\floatpagefraction}{0.85}
-\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
-\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
-\titlespacing{\section}{0pt}{10pt}{5pt}
-\titlespacing{\subsection}{0pt}{8pt}{3pt}
-
-\title{\Large\bfseries From pairwise electrocoalescence to optical clearing:\\
-a predictive dimensionless framework for electrostatic\\ demulsification of nanoemulsions}
-\author{Sreedath Panat$^{1,\ast}$, Raj Dandekar$^{1}$, Rajat Dandekar$^{1}$\\[2pt]
-\small $^{1}$Vizuara AI Labs\\
-\small $^{\ast}$Corresponding author.}
-\date{}
 
 \begin{document}
-\twocolumn[
-\maketitle
-\begin{center}\begin{minipage}{0.94\textwidth}\small
-\noindent\textbf{Abstract.}
+
+\title{From pairwise electrocoalescence to optical clearing:\\
+a predictive dimensionless framework for electrostatic demulsification of nanoemulsions}
+
+\author{Sreedath Panat}
+\author{Raj Dandekar}
+\author{Rajat Dandekar}
+\affiliation{Vizuara AI Labs}
+
+\date{\today}
+
+\begin{abstract}
 The pair-scale physics of electrocoalescence is textbook material: water
 droplets in oil polarize, attract, chain, and merge. Yet the observable that
 decides whether an electrostatic demulsifier works, the time for the emulsion
@@ -48,19 +32,19 @@ balance with a Mie-scattering endpoint, and a stochastic super-droplet
 simulation steered by a reinforcement-learning agent, predict, without
 calibration to any kinetic measurement, clearing in 90--125 minutes for a
 175\,nm, 2\% emulsion at 7.5\,kV/cm; the measured value, not consulted
-during model construction, is $\sim$60 minutes. The
-framework identifies two well-separated clocks: bulk water separation
-(minutes) and optical clearing (hours), the latter controlled by a
-sub-100-nm fines tail. A single dimensionless group, the electrocoalescence
-number $\Lambda=\pi\varepsilon_0\varepsilon_{\mathrm{oil}}K^2E^2a^3/k_BT$,
-gates the entire cascade: published voltage-sweep data collapse onto
+during model construction, is $\sim$60 minutes. The framework identifies two
+well-separated clocks: bulk water separation (minutes) and optical clearing
+(hours), the latter controlled by a sub-100-nm fines tail. A single
+dimensionless group, the electrocoalescence number
+$\Lambda=\pi\varepsilon_0\varepsilon_{\mathrm{oil}}K^2E^2a^3/k_BT$, gates the
+entire cascade: published voltage-sweep data collapse onto
 $t\cdot\Lambda=23.5$\,min (5\% RMS scatter), with the go/no-go threshold
 $\Lambda^{*}\!\approx\!0.8$ predicted in advance. The framework further
 explains, without fitting, why saline droplets demulsify more slowly than
 fresh water. Code and data are openly available.
-\end{minipage}\end{center}
-\vspace{14pt}
-]
+\end{abstract}
+
+\maketitle
 
 \section{Introduction}
 
@@ -281,20 +265,18 @@ With reward equal to negative elapsed time, the learned value of the initial
 state \emph{is} the predicted clearing time. The agent independently
 rediscovers the experimental operating point, running at the arcing edge.
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=\columnwidth]{figs/fig3_predictions.png}
-\caption{\textbf{Calibration-free predictions against the measured
-clearing time.} Central estimates (symbols) and uncertainty ranges (bars)
-for the optical endpoint from the population balance (film-barrier band),
-the fixed-field super-droplet Monte Carlo (spread over 20 seeds), and the
-learning agent's value estimate, alongside the single measured batch value
-(dashed). The grey band is the range of central estimates quoted in the
-text. The analytic route (open symbol, below the rule) times the mass
-clock, a different observable, and is shown for completeness. All model
-choices were frozen before the measured value was consulted.}
+\includegraphics[width=\textwidth]{figs/fig2_protocol.png}
+\caption{\textbf{The calibration-free prediction protocol.} Setup facts
+(materials, geometry, device characterization, size distribution, and a
+film-barrier bound from zero-field shelf life) feed three routes: a
+closed-form cascade, a population balance with Mie optics, and a
+super-droplet Monte Carlo rig driven by a reinforcement-learning agent.
+Measured kinetics remain quarantined until all three predictions are
+frozen; the quantitative comparison is shown in Fig.~\ref{fig:forest}.}
 \label{fig:protocol}
-\end{figure}
+\end{figure*}
 
 The three routes agree with one another within 21\% (range over mean of
 the central estimates) on the optical clock: population balance 110\,min
@@ -425,7 +407,8 @@ fully constrain. Resolving these tensions requires instrumented-field
 source data, and we flag them as the sharpest open questions the
 dimensionless analysis exposes.
 
-On the absolute number the model \emph{overpredicts}: the central band of
+On the absolute number the model \emph{overpredicts}
+(Fig.~\ref{fig:forest}): the central band of
 90--125\,min lies a factor 1.5--2.1 above the single measured value of
 $\sim$60\,min, with no stated experimental uncertainty or replicates to
 compare against, so the comparison establishes order-of-magnitude
@@ -638,6 +621,20 @@ assumed corona offset $V_0$ in the field reading, preferring $V_0=0$.}
 \label{fig:supp}
 \end{figure*}
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig3_predictions.png}
+\caption{\textbf{Calibration-free predictions against the measured
+clearing time.} Central estimates (symbols) and uncertainty ranges (bars)
+for the optical endpoint from the population balance (film-barrier band),
+the fixed-field super-droplet Monte Carlo (spread over 20 seeds), and the
+learning agent's value estimate, alongside the single measured batch value
+(dashed). The grey band is the range of central estimates quoted in the
+text. The analytic route (open symbol, below the rule) times the mass
+clock, a different observable, and is shown for completeness.}
+\label{fig:forest}
+\end{figure}
+
 \begin{thebibliography}{99}\small
 \bibitem{eow2001} J.~S. Eow, M.~Ghadiri, A.~O. Sharif, T.~J. Williams,
 Electrostatic enhancement of coalescence of water droplets in oil: a review
@@ -806,10 +803,9 @@ of thin, free liquid films. \emph{Discuss. Faraday Soc.} \textbf{42},
 23--33 (1966).
 \end{thebibliography}
 
-\vspace{6pt}
-\noindent\textbf{Acknowledgments.} The authors thank the Vizuara AI Labs
-team for infrastructure support.
-\smallskip
+\begin{acknowledgments}
+The authors thank the Vizuara AI Labs team for infrastructure support.
+\end{acknowledgments}
 
 \noindent\textbf{Author contributions.} S.P. conceived the study, performed
 the source experiments, and supplied the blind-prediction constraints;
